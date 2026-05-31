@@ -1550,13 +1550,18 @@ function smartParseMath(mathEqLines, allLines, mathKwLines) {
     }
   }
 
-  // 如果题目太少，用填空/拖拽补充
+  // 如果题目太少，用选择题补充（手机友好，不用数字键盘）
   if (equations.length > 0 && questions.length < 3) {
     for (const eq of equations) {
       const q = eq.left + ' = ?';
       // 检查是否已有这个题目
       if (!questions.some(qq => qq.question === q)) {
-        questions.push({ type: 'input', question: q, answer: eq.right });
+        const ans = parseInt(eq.right);
+        if (!isNaN(ans)) {
+          const opts = generateWrongAnswers(ans, 3);
+          const shuffled = shuffleArr([ans, ...opts]);
+          questions.push({ type: 'choice', question: q, options: shuffled.map(String), answer: shuffled.indexOf(ans) });
+        }
       }
     }
   }
@@ -2884,30 +2889,35 @@ function renderInput(area, q) {
     }
   }
 
-  // Number buttons
+  // Number buttons (click + touchend 支持手机，防重复触发)
+  function addTapListener(btn, fn) {
+    let touched = false;
+    btn.addEventListener('touchend', (e) => { e.preventDefault(); touched = true; fn(); });
+    btn.addEventListener('click', () => { if (touched) { touched = false; return; } fn(); });
+  }
   for (let i = 1; i <= 9; i++) {
     const btn = document.createElement('button');
     btn.className = 'numpad-btn';
     btn.textContent = i;
-    btn.addEventListener('click', () => { if (state.isAnswering) { inputVal += String(i); updateDisplay(); } });
+    addTapListener(btn, () => { if (state.isAnswering) { inputVal += String(i); updateDisplay(); } });
     pad.appendChild(btn);
   }
   const back = document.createElement('button');
   back.className = 'numpad-btn back';
   back.textContent = '⌫';
-  back.addEventListener('click', () => { if (state.isAnswering) { inputVal = inputVal.slice(0, -1); updateDisplay(); } });
+  addTapListener(back, () => { if (state.isAnswering) { inputVal = inputVal.slice(0, -1); updateDisplay(); } });
   pad.appendChild(back);
 
   const zero = document.createElement('button');
   zero.className = 'numpad-btn';
   zero.textContent = '0';
-  zero.addEventListener('click', () => { if (state.isAnswering) { inputVal += '0'; updateDisplay(); } });
+  addTapListener(zero, () => { if (state.isAnswering) { inputVal += '0'; updateDisplay(); } });
   pad.appendChild(zero);
 
   const conf = document.createElement('button');
   conf.className = 'numpad-btn confirm';
   conf.textContent = '确认';
-  conf.addEventListener('click', confirmAnswer);
+  addTapListener(conf, confirmAnswer);
   pad.appendChild(conf);
 
   area.appendChild(pad);
