@@ -987,7 +987,9 @@ body {
   .question-text { font-size: 26px; }
   .options-grid .option-btn { font-size: 24px; padding: 14px 10px; }
   .drag-equation { font-size: 28px; }
-  .match-item { font-size: 20px; padding: 12px 14px; min-width: 80px; }
+  .match-item { font-size: 22px; padding: 16px 18px; min-width: 90px; }
+  .match-area { gap: 10px; }
+  .match-column { gap: 14px; }
   .home-stars .star-count { font-size: 24px; }
   .drag-number { width: 58px; height: 58px; font-size: 24px; }
   .numpad-btn { padding: 12px; font-size: 26px; }
@@ -3191,6 +3193,61 @@ function renderMatch(area, q) {
     }
   }
 
+  let dragLine = null;
+  let dragFromEl = null;
+
+  function getTouchPos(e) {
+    const touch = e.touches ? e.touches[0] : e;
+    return { x: touch.clientX, y: touch.clientY };
+  }
+
+  function getDragLineColor() {
+    return window.getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#2196F3';
+  }
+
+  function drawDragLine(fromEl, touchX, touchY) {
+    const svg = document.getElementById('match-svg');
+    if (!svg) return;
+    if (!dragLine) {
+      dragLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      dragLine.setAttribute('stroke', getDragLineColor());
+      dragLine.setAttribute('stroke-width', '3');
+      dragLine.setAttribute('stroke-dasharray', '6,4');
+      dragLine.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(dragLine);
+    }
+    const areaRect = document.getElementById('match-area').getBoundingClientRect();
+    const lr = fromEl.getBoundingClientRect();
+    const x1 = lr.left + lr.width - areaRect.left;
+    const y1 = lr.top + lr.height / 2 - areaRect.top;
+    const x2 = touchX - areaRect.left;
+    const y2 = touchY - areaRect.top;
+    dragLine.setAttribute('x1', x1);
+    dragLine.setAttribute('y1', y1);
+    dragLine.setAttribute('x2', x2);
+    dragLine.setAttribute('y2', y2);
+  }
+
+  function removeDragLine() {
+    if (dragLine && dragLine.parentNode) {
+      dragLine.parentNode.removeChild(dragLine);
+    }
+    dragLine = null;
+    dragFromEl = null;
+  }
+
+  function getRightItemAtPoint(x, y) {
+    for (let i = 0; i < rightCol.children.length; i++) {
+      const el = rightCol.children[i];
+      if (rightMatched.has(i)) continue;
+      const r = el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   q.left.forEach((item, i) => {
     const el = document.createElement('div');
     el.className = 'match-item';
@@ -3204,6 +3261,20 @@ function renderMatch(area, q) {
       selectedLeft = i;
       el.classList.add('selected');
     });
+    // Touch drag: start
+    el.addEventListener('touchstart', (e) => {
+      if (!state.isAnswering || leftMatched.has(i)) return;
+      e.preventDefault();
+      // Select this left item
+      if (selectedLeft !== null) {
+        leftCol.children[selectedLeft].classList.remove('selected');
+      }
+      selectedLeft = i;
+      el.classList.add('selected');
+      dragFromEl = el;
+      const pos = getTouchPos(e);
+      drawDragLine(el, pos.x, pos.y);
+    }, { passive: false });
     leftCol.appendChild(el);
   });
 
@@ -3219,6 +3290,31 @@ function renderMatch(area, q) {
       }
     });
     rightCol.appendChild(el);
+  });
+
+  // Touch drag: move and end on matchArea
+  matchArea.addEventListener('touchmove', (e) => {
+    if (!dragFromEl) return;
+    e.preventDefault();
+    const pos = getTouchPos(e);
+    drawDragLine(dragFromEl, pos.x, pos.y);
+  }, { passive: false });
+
+  matchArea.addEventListener('touchend', (e) => {
+    if (!dragFromEl || selectedLeft === null) {
+      removeDragLine();
+      return;
+    }
+    const touch = e.changedTouches[0];
+    const rightIdx = getRightItemAtPoint(touch.clientX, touch.clientY);
+    if (rightIdx >= 0) {
+      handleMatch(selectedLeft, rightIdx);
+    }
+    removeDragLine();
+  });
+
+  matchArea.addEventListener('touchcancel', () => {
+    removeDragLine();
   });
 
   matchArea.appendChild(leftCol);
