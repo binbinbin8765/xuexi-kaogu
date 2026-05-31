@@ -4021,10 +4021,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // === 点击题目语音播报 ===
+  // === 点击题目语音播报（支持触屏） ===
+  let speakTouched = false;
+  document.addEventListener('touchend', (e) => {
+    const q = e.target.closest('.question-text, .fill-question, .tone-display');
+    if (q) {
+      e.preventDefault();
+      const text = q.textContent.replace(/[🔊🔤🔢📚]/g, '').trim();
+      if (text) { speakText(text); speakTouched = true; }
+    }
+  });
   document.addEventListener('click', (e) => {
     const q = e.target.closest('.question-text, .fill-question, .tone-display');
     if (q) {
+      if (speakTouched) { speakTouched = false; return; }
       const text = q.textContent.replace(/[🔊🔤🔢📚]/g, '').trim();
       if (text) speakText(text);
     }
