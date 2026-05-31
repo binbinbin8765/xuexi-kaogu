@@ -1,0 +1,4064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>幼升小闯关大冒险</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #FFF8E1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+#app {
+  width: 100%;
+  max-width: 800px;
+  min-height: 100vh;
+  position: relative;
+  background: #FFF8E1;
+  overflow: hidden;
+}
+/* ===== Pages ===== */
+.page {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+.page.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounceIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes popIn {
+  0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+  70% { transform: scale(1.1) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+@keyframes starSpin {
+  0% { transform: scale(0) rotate(0deg); }
+  60% { transform: scale(1.3) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+/* ===== Common Elements ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 20px;
+  padding: 16px 40px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.btn:hover { transform: scale(1.05); }
+.btn:active { transform: scale(0.95); }
+.btn-yellow {
+  background: #FFD54F;
+  color: #5D4037;
+  box-shadow: 0 4px 0 #FFB300, 0 6px 12px rgba(0,0,0,0.1);
+}
+.btn-yellow:active { box-shadow: 0 2px 0 #FFB300; }
+.btn-home {
+  background: #4FC3F7;
+  color: white;
+  box-shadow: 0 4px 0 #29B6F6, 0 6px 12px rgba(0,0,0,0.1);
+}
+.btn-home:active { box-shadow: 0 2px 0 #29B6F6; }
+.btn-small {
+  font-size: 22px;
+  padding: 12px 28px;
+  border-radius: 16px;
+}
+
+/* ===== Home Page ===== */
+#page-home {
+  justify-content: center;
+  gap: 20px;
+  background: linear-gradient(180deg, #E3F2FD 0%, #FFF8E1 100%);
+}
+.home-title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #5D4037;
+  text-align: center;
+  margin-bottom: 8px;
+  animation: bounceIn 0.6s ease;
+}
+.home-subtitle {
+  font-size: 20px;
+  color: #8D6E63;
+  margin-bottom: 20px;
+  animation: slideUp 0.5s ease 0.2s both;
+}
+.home-mascot {
+  font-size: 80px;
+  animation: float 3s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+.subject-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  animation: slideUp 0.5s ease 0.3s both;
+}
+.subject-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 28px;
+  border: none;
+  border-radius: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.1);
+}
+.subject-btn:hover { transform: scale(1.03); }
+.subject-btn:active { transform: scale(0.97); }
+.subject-btn .icon { font-size: 36px; }
+.subject-math { background: linear-gradient(135deg, #FF9800, #FFB74D); }
+.subject-pinyin { background: linear-gradient(135deg, #F48FB1, #F06292); }
+.subject-zi { background: linear-gradient(135deg, #81C784, #A5D6A7); }
+.home-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  color: #5D4037;
+  margin-top: 10px;
+  animation: slideUp 0.5s ease 0.4s both;
+}
+.home-stars .star-icon { font-size: 32px; }
+.home-stars .star-count { font-size: 28px; font-weight: bold; color: #F57F17; }
+
+/* ===== Input Panel ===== */
+.input-toggle {
+  background: none;
+  border: 2px dashed #BDBDBD;
+  border-radius: 20px;
+  padding: 12px 24px;
+  font-size: 22px;
+  color: #8D6E63;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 8px;
+}
+.input-toggle:hover { border-color: #4FC3F7; color: #4FC3F7; }
+.input-panel {
+  width: 100%;
+  max-width: 400px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.input-panel.open { display: flex; }
+.input-panel label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #5D4037;
+}
+.input-panel textarea {
+  width: 100%;
+  min-height: 260px;
+  padding: 16px;
+  border: 2px solid #E0E0E0;
+  border-radius: 16px;
+  font-size: 16px;
+  font-family: 'PingFang SC', monospace;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s;
+  color: #5D4037;
+}
+.input-panel textarea:focus { outline: none; border-color: #4FC3F7; }
+.input-panel .input-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.input-panel .btn-gen {
+  flex: 1;
+  background: #4FC3F7;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 20px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: 0 3px 0 #29B6F6;
+}
+.input-panel .btn-gen:active { transform: scale(0.97); box-shadow: 0 1px 0 #29B6F6; }
+.input-panel .btn-demo {
+  background: #E0E0E0;
+  color: #5D4037;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: 0 3px 0 #BDBDBD;
+}
+.input-panel .btn-demo:active { transform: scale(0.97); box-shadow: 0 1px 0 #BDBDBD; }
+.input-panel .input-format {
+  font-size: 14px;
+  color: #9E9E9E;
+  line-height: 1.5;
+  background: #F5F5F5;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 0;
+  white-space: pre-wrap;
+}
+.input-status {
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+.input-status.success { background: #E8F5E9; color: #388E3C; }
+.input-status.error { background: #FFEBEE; color: #D32F2F; }
+.subject-btn.hidden { display: none; }
+
+/* ===== Knowledge Page ===== */
+#page-knowledge {
+  padding: 20px;
+  gap: 16px;
+  overflow-y: auto;
+}
+.knowledge-header {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0 10px;
+}
+.knowledge-header h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.knowledge-content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+.knowledge-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.knowledge-card h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.knowledge-card p, .knowledge-card li {
+  font-size: 22px;
+  line-height: 1.6;
+  color: #5D4037;
+}
+.knowledge-card ul { list-style: none; padding: 0; }
+.knowledge-card ul li {
+  padding: 8px 14px;
+  margin: 6px 0;
+  background: #FFF8E1;
+  border-radius: 12px;
+  border-left: 4px solid #4FC3F7;
+}
+.knowledge-method-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 8px 0;
+  border-left: 5px solid #FF9800;
+  font-size: 22px;
+  line-height: 1.5;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.knowledge-zi-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin: 8px 0;
+}
+.knowledge-zi-card .big-zi {
+  font-size: 72px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.knowledge-zi-card .zi-pinyin {
+  font-size: 28px;
+  color: #F48FB1;
+  margin: 8px 0;
+}
+.knowledge-zi-card .zi-detail {
+  font-size: 20px;
+  color: #8D6E63;
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.knowledge-zi-card .zi-word {
+  display: inline-block;
+  background: #E8F5E9;
+  border-radius: 12px;
+  padding: 6px 16px;
+  font-size: 22px;
+  color: #388E3C;
+  margin: 4px;
+}
+.knowledge-pinyin-letter {
+  font-size: 72px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  color: #F48FB1;
+}
+.knowledge-pinyin-rhyme {
+  font-size: 24px;
+  text-align: center;
+  color: #5D4037;
+  padding: 12px;
+  background: #FCE4EC;
+  border-radius: 16px;
+  margin: 8px 0;
+}
+.knowledge-pinyin-note {
+  font-size: 20px;
+  color: #D32F2F;
+  padding: 12px;
+  background: #FFEBEE;
+  border-radius: 16px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.knowledge-pinyin-example {
+  font-size: 28px;
+  text-align: center;
+  padding: 12px;
+  background: #E3F2FD;
+  border-radius: 16px;
+  margin: 8px 0;
+  color: #1565C0;
+}
+.play-sound-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #4FC3F7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.play-sound-btn:hover { transform: scale(1.1); }
+.play-sound-btn:active { transform: scale(0.95); }
+.knowledge-zi-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.knowledge-zi-nav button {
+  background: #E0E0E0;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.knowledge-zi-nav button.active { background: #81C784; color: white; }
+.knowledge-zi-nav button:hover { background: #BDBDBD; }
+.stroke-animation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  margin: 12px 0;
+}
+.stroke-item {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 20px;
+  background: #F5F5F5;
+  color: #9E9E9E;
+  transition: all 0.3s ease;
+}
+.stroke-item.active {
+  background: #81C784;
+  color: white;
+  transform: scale(1.1);
+}
+.start-game-btn-wrapper {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0 30px;
+}
+
+/* ===== Game Page ===== */
+#page-game {
+  padding: 16px;
+  gap: 12px;
+}
+.game-top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+}
+.game-progress-container {
+  flex: 1;
+  height: 18px;
+  background: #E0E0E0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.game-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4FC3F7, #81C784);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.game-hearts {
+  display: flex;
+  gap: 4px;
+  font-size: 28px;
+}
+.game-hearts .heart {
+  transition: all 0.3s ease;
+}
+.game-hearts .heart.lost {
+  filter: grayscale(1);
+  opacity: 0.3;
+  transform: scale(0.8);
+}
+.game-question-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0;
+}
+.question-text {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  color: #5D4037;
+  line-height: 1.4;
+  animation: slideUp 0.3s ease;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 16px;
+  transition: background 0.2s;
+  user-select: none;
+}
+.question-text:hover { background: rgba(79,195,247,0.1); }
+.question-text::after { content: ' 🔊'; font-size: 22px; opacity: 0.4; transition: opacity 0.2s; }
+.question-text:hover::after { opacity: 1; }
+.question-subtext {
+  font-size: 22px;
+  color: #8D6E63;
+  text-align: center;
+}
+/* Choice question */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+}
+.option-btn {
+  background: white;
+  border: 3px solid #E0E0E0;
+  border-radius: 20px;
+  padding: 18px 12px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+  color: #5D4037;
+}
+.option-btn:hover { transform: scale(1.03); border-color: #4FC3F7; }
+.option-btn:active { transform: scale(0.97); }
+.option-btn.correct {
+  background: #C8E6C9;
+  border-color: #4CAF50;
+  animation: bounceIn 0.4s ease;
+}
+.option-btn.wrong {
+  background: #FFCDD2;
+  border-color: #F44336;
+  animation: shake 0.4s ease;
+}
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+/* Input question */
+.input-display {
+  font-size: 48px;
+  font-weight: bold;
+  color: #5D4037;
+  text-align: center;
+  min-height: 60px;
+  padding: 10px 30px;
+  background: white;
+  border-radius: 16px;
+  border: 3px solid #E0E0E0;
+  min-width: 120px;
+}
+.input-display.filled { border-color: #4FC3F7; }
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 360px;
+  width: 100%;
+}
+.numpad-btn {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+  color: #5D4037;
+}
+.numpad-btn:hover { background: #F5F5F5; }
+.numpad-btn:active { transform: scale(0.95); }
+.numpad-btn.confirm { background: #FFD54F; border-color: #FFB300; }
+.numpad-btn.confirm:active { background: #FFB300; }
+.numpad-btn.back { background: #FFCDD2; border-color: #EF9A9A; font-size: 22px; }
+/* Drag question */
+.drag-area {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.drag-equation {
+  font-size: 36px;
+  font-weight: bold;
+  color: #5D4037;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.drag-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 60px;
+  border: 3px dashed #BDBDBD;
+  border-radius: 16px;
+  background: white;
+  font-size: 32px;
+  color: #BDBDBD;
+  transition: all 0.2s ease;
+}
+.drag-slot.filled {
+  border-style: solid;
+  border-color: #4CAF50;
+  color: #5D4037;
+}
+.drag-slot.drag-over {
+  border-color: #4FC3F7;
+  background: #E3F2FD;
+  transform: scale(1.05);
+}
+.drag-numbers {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.drag-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: white;
+  border: 3px solid #E0E0E0;
+  border-radius: 16px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: grab;
+  transition: all 0.15s ease;
+  touch-action: none;
+  color: #5D4037;
+  user-select: none;
+}
+.drag-number:hover { border-color: #4FC3F7; transform: scale(1.05); }
+.drag-number:active { cursor: grabbing; }
+.drag-number.dragging {
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+.drag-number.placed {
+  opacity: 0.3;
+  pointer-events: none;
+}
+/* Match question */
+.match-area {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px 0;
+}
+.match-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1;
+}
+.match-item {
+  padding: 14px 20px;
+  background: white;
+  border: 3px solid #E0E0E0;
+  border-radius: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+  text-align: center;
+  color: #5D4037;
+  min-width: 100px;
+}
+.match-item:hover { transform: scale(1.03); }
+.match-item.selected {
+  border-color: #4FC3F7;
+  background: #E3F2FD;
+  box-shadow: 0 0 0 3px rgba(79,195,247,0.3);
+}
+.match-item.matched {
+  border-color: #4CAF50;
+  background: #C8E6C9;
+  pointer-events: none;
+}
+.match-item.wrong {
+  border-color: #F44336;
+  background: #FFCDD2;
+  animation: shake 0.4s ease;
+}
+/* Listen question */
+.listen-area {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.listen-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #4FC3F7;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 0 #29B6F6, 0 6px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.listen-btn:hover { transform: scale(1.08); }
+.listen-btn:active { transform: scale(0.95); box-shadow: 0 2px 0 #29B6F6; }
+.listen-btn.playing { animation: pulse 0.5s ease infinite; }
+/* Tone question */
+.tone-display {
+  font-size: 48px;
+  font-weight: bold;
+  color: #F48FB1;
+  text-align: center;
+  cursor: pointer;
+  padding: 8px 20px;
+  border-radius: 16px;
+  transition: background 0.2s;
+  user-select: none;
+}
+.tone-display:hover { background: rgba(244,143,177,0.1); }
+.tone-display::after { content: ' 🔊'; font-size: 24px; opacity: 0.4; }
+.tone-display:hover::after { opacity: 1; }
+/* Fill question */
+.fill-question {
+  font-size: 36px;
+  font-weight: bold;
+  color: #5D4037;
+  text-align: center;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 16px;
+  transition: background 0.2s;
+  user-select: none;
+}
+.fill-question:hover { background: rgba(79,195,247,0.1); }
+.fill-question::after { content: ' 🔊'; font-size: 22px; opacity: 0.4; }
+.fill-question:hover::after { opacity: 1; }
+.fill-blank {
+  display: inline-block;
+  min-width: 60px;
+  border-bottom: 3px solid #4FC3F7;
+  color: #4FC3F7;
+  padding: 0 4px;
+}
+/* Image question */
+.image-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+}
+.image-option {
+  background: white;
+  border: 3px solid #E0E0E0;
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  touch-action: manipulation;
+  color: #5D4037;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.image-option:hover { transform: scale(1.03); border-color: #4FC3F7; }
+.image-option:active { transform: scale(0.97); }
+
+/* Feedback overlay */
+.feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+.feedback-overlay.show { display: flex; }
+.feedback-icon {
+  font-size: 120px;
+  animation: bounceIn 0.5s ease;
+}
+.feedback-overlay.correct .feedback-icon { color: #4CAF50; }
+.feedback-overlay.wrong .feedback-icon { color: #F44336; }
+
+/* Game over overlay */
+.game-over-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.game-over-overlay.show { display: flex; }
+.game-over-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  animation: bounceIn 0.5s ease;
+}
+.game-over-card h2 {
+  font-size: 32px;
+  color: #F44336;
+  margin-bottom: 12px;
+}
+.game-over-card p {
+  font-size: 22px;
+  color: #8D6E63;
+  margin-bottom: 24px;
+}
+.game-over-card .btn { width: 100%; }
+
+/* ===== Celebration Page ===== */
+#page-celebration {
+  justify-content: center;
+  gap: 20px;
+  background: linear-gradient(180deg, #FFF8E1, #E8F5E9);
+  position: relative;
+}
+.celebration-star {
+  font-size: 100px;
+  animation: starSpin 1s ease 0.3s both;
+}
+.celebration-title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #5D4037;
+  animation: bounceIn 0.6s ease 0.5s both;
+}
+.celebration-sub {
+  font-size: 24px;
+  color: #8D6E63;
+  animation: slideUp 0.5s ease 0.8s both;
+}
+.celebration-stars-earned {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 32px;
+  color: #F57F17;
+  animation: bounceIn 0.5s ease 1s both;
+}
+.celebration-stars-earned .star-icon { font-size: 48px; }
+.celebration-btn-wrapper {
+  animation: slideUp 0.5s ease 1.2s both;
+}
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ===== Homework Page ===== */
+#page-homework {
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 20px;
+}
+.homework-icon {
+  font-size: 64px;
+  animation: float 3s ease-in-out infinite;
+}
+.homework-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #5D4037;
+  text-align: center;
+}
+.homework-list {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.homework-item {
+  background: white;
+  border-radius: 20px;
+  padding: 18px 20px;
+  font-size: 22px;
+  color: #5D4037;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  animation: slideUp 0.3s ease;
+}
+.homework-item .check {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #BDBDBD;
+  border-radius: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.homework-item .check.done {
+  background: #4CAF50;
+  border-color: #4CAF50;
+}
+.homework-item .check.done::after { content: '✓'; color: white; font-size: 18px; font-weight: bold; }
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .home-title { font-size: 32px; }
+  .subject-btn { font-size: 24px; padding: 16px 20px; }
+  .subject-btn .icon { font-size: 28px; }
+  .btn { font-size: 24px; padding: 14px 30px; }
+  .question-text { font-size: 26px; }
+  .options-grid .option-btn { font-size: 24px; padding: 14px 10px; }
+  .drag-equation { font-size: 28px; }
+  .match-item { font-size: 20px; padding: 12px 14px; min-width: 80px; }
+  .home-stars .star-count { font-size: 24px; }
+  .drag-number { width: 58px; height: 58px; font-size: 24px; }
+  .numpad-btn { padding: 12px; font-size: 26px; }
+  .knowledge-card h2 { font-size: 22px; }
+  .knowledge-card p, .knowledge-card li { font-size: 20px; }
+  .celebration-title { font-size: 32px; }
+}
+
+@media (min-width: 768px) {
+  #app { min-height: 90vh; margin: 20px auto; border-radius: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .page { padding: 30px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ============ 首页 ============ -->
+  <div id="page-home" class="page active">
+    <div class="home-mascot">🦉</div>
+    <div class="home-title">幼升小闯关大冒险</div>
+    <div class="home-subtitle">每天闯一关，快乐学知识！</div>
+    <div class="subject-buttons">
+      <button class="subject-btn subject-math" onclick="enterSubject('math')">
+        <span class="icon">🔢</span>
+        <span>数学闯关</span>
+      </button>
+      <button class="subject-btn subject-pinyin" onclick="enterSubject('pinyin')">
+        <span class="icon">🔤</span>
+        <span>拼音闯关</span>
+      </button>
+      <button class="subject-btn subject-zi" onclick="enterSubject('zi')">
+        <span class="icon">📚</span>
+        <span>识字闯关</span>
+      </button>
+    </div>
+    <div class="home-stars">
+      <span class="star-icon">⭐</span>
+      <span>累计获得：</span>
+      <span class="star-count" id="home-star-count">0</span>
+      <span>颗星星</span>
+    </div>
+    <button class="input-toggle" id="input-toggle" onclick="toggleInputPanel()">📝 输入今日学习内容</button>
+    <div class="input-panel" id="input-panel">
+      <label>粘贴今日学习内容（支持任意格式，自动识别数学/拼音/识字）</label>
+      <textarea id="input-textarea" placeholder='直接粘贴老师发的内容，例如：
+
+今日数学：
+50以内两位数加一位数
+方法：个位相加，十位不变
+23+5=28
+35+4=39
+连线：21+3=24,34+5=39,17+2=19
+作业：完成打印卷
+
+或者拼音内容：
+后鼻韵母 eng
+一只蜜蜂 eng eng eng
+b-eng→beng  p-eng→peng
+作业：复习三次
+
+或者识字内容：
+味 wèi 口味
+用 yòng 用心
+砍 kǎn 砍伐
+作业：完成书写作业'></textarea>
+      <div class="input-actions">
+        <button class="btn-gen" onclick="generateFromInput()">✨ 生成闯关游戏</button>
+        <button class="btn-demo" onclick="loadDemoData()">📋 加载示例</button>
+      </div>
+      <div id="input-status" class="input-status"></div>
+      <pre class="input-format">💡 任意粘贴即可，系统会自动识别：
+• 含 + - 和数字 → 生成数学闯关
+• 含拼音字母 → 生成拼音闯关
+• 含"汉字+拼音" → 生成识字闯关
+多个科目内容可以一起粘贴</pre>
+    </div>
+  </div>
+
+  <!-- ============ 知识点讲解页 ============ -->
+  <div id="page-knowledge" class="page">
+    <div class="knowledge-header">
+      <h1 id="knowledge-title">今日小课堂</h1>
+    </div>
+    <div class="knowledge-content" id="knowledge-content">
+    </div>
+    <div class="start-game-btn-wrapper">
+      <button class="btn btn-yellow" onclick="startGame()">开始闯关！</button>
+    </div>
+  </div>
+
+  <!-- ============ 答题页 ============ -->
+  <div id="page-game" class="page">
+    <div class="game-top-bar">
+      <div class="game-progress-container">
+        <div class="game-progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="game-hearts" id="hearts-display">
+        <span class="heart">❤️</span>
+        <span class="heart">❤️</span>
+        <span class="heart">❤️</span>
+      </div>
+    </div>
+    <div class="game-question-area" id="question-area">
+    </div>
+  </div>
+
+  <!-- ============ 通关庆祝页 ============ -->
+  <div id="page-celebration" class="page">
+    <div class="celebration-star">⭐</div>
+    <div class="celebration-title">🎉 太棒了！🎉</div>
+    <div class="celebration-sub">你已成功闯过今日关卡！</div>
+    <div class="celebration-stars-earned">
+      <span class="star-icon">⭐</span>
+      <span>+1 颗星星</span>
+    </div>
+    <div class="celebration-btn-wrapper">
+      <button class="btn btn-yellow" onclick="goToHomework()">继续加油 🎯</button>
+    </div>
+  </div>
+
+  <!-- ============ 作业提醒页 ============ -->
+  <div id="page-homework" class="page">
+    <div class="homework-icon">📝</div>
+    <div class="homework-title">今日作业提醒</div>
+    <div class="homework-list" id="homework-list"></div>
+    <button class="btn btn-home" onclick="goHome()">返回首页 🏠</button>
+  </div>
+
+  <!-- ============ 反馈浮层 ============ -->
+  <div class="feedback-overlay" id="feedback-overlay">
+    <div class="feedback-icon" id="feedback-icon">✅</div>
+  </div>
+
+  <!-- ============ 游戏结束浮层 ============ -->
+  <div class="game-over-overlay" id="game-over-overlay">
+    <div class="game-over-card">
+      <h2>💔 再试一次</h2>
+      <p>爱心用完了，别灰心！<br>再来一次一定能通关！</p>
+      <button class="btn btn-yellow" onclick="retryLevel()">🔄 再试一次</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 🎯 内容替换区域 - 每天替换这里的三个数据对象即可
+// ============================================================
+
+// ===== 数学数据 =====
+let mathData = {
+  title: "50以内两位数加一位数",
+  goal: "掌握50以内两位数加一位数进位与不进位的计算方法",
+  methods: [
+    "不进位加法：个位相加，十位不变",
+    "进位加法：把两位数拆成整十数和个位数，先算个位相加，再加整十数"
+  ],
+  questions: [
+    { type: "choice", question: "23 + 5 = ?", options: ["27", "28", "37", "38"], answer: 1 },
+    { type: "input", question: "35 + 4 = ?", answer: "39" },
+    { type: "drag", question: "32 + 6 = ?", numbers: ["36", "38", "42", "46"], answer: "38" },
+    { type: "match", left: ["21+3", "34+5", "17+2"], right: ["19", "24", "39"], answer: [[0,1], [1,2], [2,0]] },
+    { type: "choice", question: "37 + 5 = ?", options: ["41", "42", "51", "52"], answer: 1 }
+  ],
+  homework: [
+    "完成打印卷（需要解题过程）",
+    "作业明天带回"
+  ]
+};
+
+// ===== 拼音数据 =====
+let pinyinData = {
+  title: "后鼻韵母 eng",
+  content: [
+    { type: "letter", letter: "eng", rhyme: "一只蜜蜂 eng eng eng", note: "占中下格，先写en再写g" },
+    { type: "example", text: "b-eng → beng" },
+    { type: "example", text: "p-eng → peng" },
+    { type: "warning", text: "eng不可以和j、q、x、y相拼" }
+  ],
+  questions: [
+    { type: "listen", audio: "eng", options: ["en", "eng", "in", "ing"], answer: 1 },
+    { type: "choice", question: '哪个是"蜜蜂"的韵母？', options: ["en", "eng", "in", "ing"], answer: 1 },
+    { type: "tone", pinyin: "feng", display: "feng", options: ["fēng", "féng", "fěng", "fèng"], answer: 0 },
+    { type: "fill", question: "b-___ → beng", options: ["en", "eng", "in", "ing"], answer: 1 },
+    { type: "choice", question: "哪个拼音是正确的？", options: ["jeng", "qeng", "peng", "xeng"], answer: 2 }
+  ],
+  homework: [
+    "完成书本p110-111页内容并复习三次",
+    '完成拼音描红本"eng"的内容',
+    "复习后鼻韵母ang、eng朗读卷一次"
+  ]
+};
+
+// ===== 识字数据 =====
+let ziData = {
+  title: "阶梯识字《竹子》",
+  words: [
+    { zi: "味", pinyin: "wèi", stroke: "竖、横折、横、横、横、竖、撇、捺", count: 8, word: "口味" },
+    { zi: "用", pinyin: "yòng", stroke: "撇、横折钩、横、横、竖", count: 5, word: "用心" },
+    { zi: "砍", pinyin: "kǎn", stroke: "横、撇、竖、横折、横、撇、横钩、撇、捺", count: 9, word: "砍伐" },
+    { zi: "虽", pinyin: "suī", stroke: "竖、横折、横、竖、横折、横、竖、横、点", count: 9, word: "虽然" }
+  ],
+  questions: [
+    { type: "zi2pinyin", zi: "味", options: ["wèi", "wēi", "wěi", "wèn"], answer: 0 },
+    { type: "pinyin2zi", pinyin: "yòng", options: ["月", "用", "有", "友"], answer: 1 },
+    { type: "match", left: ["砍", "虽", "骨"], right: ["虽然", "砍伐", "骨气"], answer: [[0,1], [1,0], [2,2]] },
+    { type: "stroke", zi: "用", question: '"用"字第一笔是什么？', options: ["横折钩", "撇", "横", "竖"], answer: 1 },
+    { type: "choice", question: '"用心"的"用"是哪个字？', options: ["月", "用", "有", "友"], answer: 1 }
+  ],
+  homework: [
+    "完成第26页书写作业（注意书写笔顺）",
+    "指读书本第25页内容：识字、词语各3次"
+  ]
+};
+
+// ============================================================
+// 📝 内容输入与解析系统
+// ============================================================
+
+// 保存内容到 localStorage
+function saveContentToLS(text) {
+  try { localStorage.setItem('dailyContent', text); } catch(e) {}
+}
+
+// 从 localStorage 读取内容
+function loadContentFromLS() {
+  try { return localStorage.getItem('dailyContent'); } catch(e) { return null; }
+}
+
+// 切换输入面板
+function toggleInputPanel() {
+  const panel = document.getElementById('input-panel');
+  const btn = document.getElementById('input-toggle');
+  panel.classList.toggle('open');
+  btn.textContent = panel.classList.contains('open') ? '📝 收起输入面板' : '📝 输入今日学习内容';
+  if (panel.classList.contains('open')) {
+    const saved = loadContentFromLS();
+    if (saved) document.getElementById('input-textarea').value = saved;
+  }
+}
+
+// 更新科目按钮显示
+function updateSubjectButtons() {
+  const mBtn = document.querySelector('.subject-math');
+  const pBtn = document.querySelector('.subject-pinyin');
+  const zBtn = document.querySelector('.subject-zi');
+  const hasMath = mathData && mathData.questions && mathData.questions.length > 0;
+  const hasPinyin = pinyinData && pinyinData.questions && pinyinData.questions.length > 0;
+  const hasZi = ziData && ziData.questions && ziData.questions.length > 0;
+  mBtn.classList.toggle('hidden', !hasMath);
+  pBtn.classList.toggle('hidden', !hasPinyin);
+  zBtn.classList.toggle('hidden', !hasZi);
+}
+
+// ===== 智能内容解析器 =====
+// 支持任意格式粘贴，自动识别数学/拼音/识字内容
+function parseContent(text) {
+  const result = { math: null, pinyin: null, zi: null };
+  const rawLines = text.split('\n');
+  const lines = rawLines.map(l => l.trim()).filter(l => l && !l.startsWith('//') && !l.startsWith('#'));
+
+  if (lines.length === 0) return result;
+
+  // 独立检测每个科目（不互斥），只对明确的内容做出反应
+  const mathEqLines = [];    // 含算式的行
+  const mathKwLines = [];    // 含数学关键词的行
+  const pinyinExLines = [];  // 含拼读示例的行
+  const pinyinKwLines = [];  // 含拼音关键词的行
+  const ziPairLines = [];    // 含 汉字+拼音 配对的行
+  const ziKwLines = [];      // 含识字关键词的行
+
+  for (const line of lines) {
+    // === 数学检测：必须有实际算式 ===
+    // 完整的算式: 23+5=28
+    if (/\d+\s*[+\-＋－×÷]\s*\d+\s*[=＝]\s*\d+/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 算式+问号: 23+5=?
+    else if (/\d+\s*[+\-＋－×÷]\s*\d+\s*[=＝]\s*[\?？]/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 只有运算符和数字: 23+5
+    else if (/^\s*\d+\s*[+\-＋－]\s*\d+\s*$/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 算式+等号无结果: 23+5=
+    else if (/^\s*\d+\s*[+\-＋－]\s*\d+\s*[=＝]\s*$/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 算式+括号: 23+5=( ) 或 23+5=（）
+    else if (/\d+\s*[+\-＋－×÷]\s*\d+\s*[=＝]\s*[（(]\s*[)）]/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 括号在前的填空: ( )+3=8 或 （）+3=8
+    else if (/[（(]\s*[)）]\s*[+\-＋－]\s*\d+\s*[=＝]\s*\d+/.test(line)) {
+      mathEqLines.push(line);
+    }
+    // 数学关键词（扩展）
+    else if (/数学|计算|口算|加减法|加法|减法|进位|退位|凑十|破十|竖式|立体图形|正方体|长方体|圆柱体|球体|钟表|整点|半点|借十|单双数|相邻数|比大小|列式|看图|规律|应用题|解决问题|10以内|20以内|50以内|100以内/.test(line)) {
+      mathKwLines.push(line);
+    }
+    // 含等号的多算式行（连线题）
+    else if (line.match(/\d+\s*[+\-]\s*\d+\s*[=＝]\s*\d+/g) && line.match(/\d+\s*[+\-]\s*\d+\s*[=＝]\s*\d+/g).length >= 2) {
+      mathEqLines.push(line);
+    }
+
+    // === 拼音检测：必须有拼音字母或拼读符号 ===
+    // 拼读模式: b-eng→beng, p-eng→peng
+    if (/[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\s*[-‐→➡️]\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+/.test(line)) {
+      pinyinExLines.push(line);
+    }
+    // 带声调的拼音字母单独成行: fēng, eng
+    else if (/^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]{1,6}$/.test(line)) {
+      pinyinExLines.push(line);
+    }
+    // 声母/韵母列表: b p m f d t n l
+    else if (/^[a-zāáǎà]{1,2}(\s+[a-zāáǎà]{1,2}){3,}$/.test(line)) {
+      pinyinExLines.push(line);
+    }
+    // 拼音关键词（扩展）
+    if (/拼音|韵母|声母|拼读|后鼻韵母|前鼻韵母|复韵母|整体认读音节|标调|两拼|三拼|介母/.test(line)) {
+      pinyinKwLines.push(line);
+    }
+
+    // === 识字检测：必须有汉字+拼音配对 ===
+    // "字 拼音" 模式: 味 wèi
+    if (/^[一-鿿]\s+[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(line) && line.length < 30) {
+      ziPairLines.push(line);
+    }
+    // "字|拼音" 模式
+    else if (/^[一-鿿]\s*[|｜]\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(line)) {
+      ziPairLines.push(line);
+    }
+    // "字：拼音" 模式: 味：wèi
+    else if (/^[一-鿿]\s*[：:]\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(line)) {
+      ziPairLines.push(line);
+    }
+    // "字（词语）" 格式: 大（大小）
+    else if (/^[一-鿿]\s*[（(]\s*[一-鿿]{2,}\s*[）)]/.test(line)) {
+      ziPairLines.push(line);
+    }
+    // "词语（拼音）" 格式: 贝壳（bèi ké）
+    else if (/^[一-鿿]{2,}[（(]\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(line) && line.length < 60) {
+      ziPairLines.push(line);
+    }
+    // "序号. 字（N画）：笔顺" 格式: 1. 贝（4画）：竖 → 横折
+    else if (/^\d+[.、]\s*[一-鿿]\s*（\d+画）/ .test(line)) {
+      ziPairLines.push(line);
+    }
+    // 逗号/顿号分隔的汉字列表: 花、草、树、木（作为识字线索）
+    else if (/^[一-鿿][、，,]\s*[一-鿿]/.test(line) && line.length < 40 && !/[a-zāáǎà]/.test(line)) {
+      ziKwLines.push(line);
+    }
+    // 识字关键词（扩展）
+    if (/识字|生字|汉字|笔顺|组词|认字|会认|会写|认一认|字词|词语|生字表|写字/.test(line)) {
+      ziKwLines.push(line);
+    }
+  }
+
+  // 判断各科目是否应该激活
+  const hasCJKline = lines.some(l => /[一-鿿]{2,}/.test(l));
+  const hasPinyinLetter = lines.some(l => /[a-zāáǎà]/.test(l));
+
+  // 数学：有算式或强关键词（>=2行关键词）
+  if (mathEqLines.length >= 1 || mathKwLines.length >= 2) {
+    result.math = smartParseMath(mathEqLines, lines, mathKwLines);
+  }
+  // 拼音：有拼读示例、或拼音字母、或关键词+拼音线索
+  if (pinyinExLines.length >= 1 || pinyinKwLines.length >= 2 || (pinyinKwLines.length >= 1 && hasPinyinLetter)) {
+    result.pinyin = smartParsePinyin(pinyinExLines, lines, pinyinKwLines);
+  }
+  // 识字：有配对行、或关键词+汉字线索
+  if (ziPairLines.length >= 1 || (ziKwLines.length >= 1 && hasCJKline)) {
+    result.zi = smartParseZi(ziPairLines, lines, ziKwLines);
+  }
+
+  return result;
+}
+
+// ===== 智能解析：数学 =====
+function smartParseMath(mathEqLines, allLines, mathKwLines) {
+  // 提取标题
+  let title = '';
+  for (const line of allLines) {
+    if (/标题|^第|^复习|^练习|^学习|今日|今天/.test(line) && line.length < 50) {
+      title = line.replace(/^.*?[:：]/, '').trim();
+      break;
+    }
+  }
+  if (!title) title = '数学练习';
+
+  // 提取目标
+  let goal = '';
+  for (const line of allLines) {
+    const m = line.match(/目标[：:]\s*(.+)/);
+    if (m) { goal = m[1]; break; }
+  }
+  if (!goal) {
+    const methodLines = allLines.filter(l => /方法|步骤|口诀|凑十|破十|进位|退位|个位|十位/.test(l));
+    goal = methodLines.length > 0 ? methodLines[0].replace(/^.*?[:：]/, '').trim() : '完成数学练习';
+  }
+
+  // 提取方法
+  const methods = [];
+  for (const line of allLines) {
+    if (/方法|步骤|口诀|凑十|破十|进位|退位|个位|十位|拆/.test(line) && line.length < 80) {
+      const text = line.replace(/^.*?[:：]/, '').trim();
+      if (text && !methods.includes(text)) methods.push(text);
+    }
+  }
+
+  // 提取作业
+  const homework = [];
+  for (const line of allLines) {
+    if (/作业|复习|完成|背诵|订正|签名/.test(line) && line.length < 100) {
+      const text = line.replace(/^.*?[:：]/, '').trim();
+      if (text && text.length > 2) homework.push(text);
+    }
+  }
+
+  // 提取所有算式，生成题目
+  const equations = [];
+  const matchPairs = [];
+
+  for (const line of mathEqLines) {
+    // 匹配多个算式在一行: "21+3=24  34+5=39"
+    const multiEq = line.match(/(\d+\s*[+\-＋－]\s*\d+\s*[=＝]\s*\d+)/g);
+    if (multiEq && multiEq.length >= 2) {
+      const pairs = multiEq.map(eq => {
+        const p = eq.split(/[=＝]/);
+        return { left: p[0].trim(), right: p[1].trim() };
+      });
+      if (pairs.length >= 2) {
+        matchPairs.push({ left: pairs.map(p => p.left), right: pairs.map(p => p.right) });
+        pairs.forEach(p => equations.push({ left: p.left, right: p.right }));
+      }
+      continue;
+    }
+
+    // 单个算式: "23+5=28" 或 "23+5=？" 或 "23+5=?"
+    const singleEq = line.match(/(\d+\s*[+\-＋－]\s*\d+)\s*[=＝]\s*(\d+|[\?？])/);
+    if (singleEq) {
+      const left = singleEq[1].trim();
+      const right = singleEq[2].trim();
+      if (right !== '?' && right !== '？') {
+        equations.push({ left, right });
+      }
+      continue;
+    }
+
+    // 算式无结果: "23+5=" — 自动计算结果
+    const noResultEq = line.match(/^\s*(\d+\s*[+\-＋－]\s*\d+)\s*[=＝]\s*$/);
+    if (noResultEq) {
+      const eqStr = noResultEq[1].trim();
+      const parts = eqStr.match(/(\d+)\s*([+\-＋－])\s*(\d+)/);
+      if (parts) {
+        const a = parseInt(parts[1]);
+        const op = parts[2];
+        const b = parseInt(parts[3]);
+        const result = (op === '+' || op === '＋') ? a + b : a - b;
+        equations.push({ left: eqStr, right: String(result) });
+      }
+      continue;
+    }
+
+    // 一行里有多个等号分隔的可能: "连[线成]：21+3=24"
+    const linkMatch = line.match(/(\d+\s*[+\-]\s*\d+)[=＝](\d+)/g);
+    if (linkMatch && linkMatch.length >= 2) {
+      const pairs = linkMatch.map(eq => {
+        const p = eq.split(/[=＝]/);
+        return { left: p[0].trim(), right: p[1].trim() };
+      });
+      matchPairs.push({ left: pairs.map(p => p.left), right: pairs.map(p => p.right) });
+      pairs.forEach(p => equations.push({ left: p.left, right: p.right }));
+    }
+  }
+
+  const questions = [];
+
+  // 从算式生成各类互动题（混合题型）
+  const usedEqKeys = new Set();
+  for (const eq of equations) {
+    const ans = parseInt(eq.right);
+    if (isNaN(ans)) continue;
+    const key = eq.left + '=' + eq.right;
+    if (usedEqKeys.has(key)) continue;
+    usedEqKeys.add(key);
+    const qText = eq.left + ' = ?';
+
+    // 混合题型：选择题、判断对错、比较
+    const typeRoll = Math.random();
+    if (typeRoll < 0.4) {
+      // 选择题
+      const options = generateWrongAnswers(ans, 3);
+      const shuffled = shuffleArr([ans, ...options]);
+      questions.push({ type: 'choice', question: qText, options: shuffled.map(String), answer: shuffled.indexOf(ans) });
+    } else if (typeRoll < 0.7) {
+      // 判断对错 (judge) — 有时对有时错
+      const isRight = Math.random() > 0.4;
+      const shownAns = isRight ? ans : ans + (Math.random() > 0.5 ? 1 : -1) * (1 + Math.floor(Math.random() * 3));
+      if (shownAns >= 0) {
+        const display = eq.left + ' = ' + shownAns;
+        questions.push({ type: 'judge', display, answer: isRight ? 1 : 0 });
+      } else {
+        // fallback to choice
+        const options = generateWrongAnswers(ans, 3);
+        const shuffled = shuffleArr([ans, ...options]);
+        questions.push({ type: 'choice', question: qText, options: shuffled.map(String), answer: shuffled.indexOf(ans) });
+      }
+    } else {
+      // 加减法拖拽 (drag)
+      const numbers = generateWrongAnswers(ans, 3);
+      numbers.push(ans);
+      questions.push({ type: 'drag', question: eq.left + ' = □', numbers: shuffleArr(numbers), answer: ans });
+    }
+  }
+
+  // 从算式数字中额外生成比大小题
+  const allEqNums = [];
+  for (const eq of equations) {
+    const parts = eq.left.match(/\d+/g);
+    if (parts) parts.forEach(n => { const v = parseInt(n); if (v > 0) allEqNums.push(v); });
+  }
+  const usedCompare = new Set();
+  for (let i = 0; i < allEqNums.length - 1 && questions.length < 12; i += 2) {
+    const a = allEqNums[i], b = allEqNums[i + 1];
+    if (a === b) continue;
+    const ck = `cmp:${Math.min(a,b)}-${Math.max(a,b)}`;
+    if (usedCompare.has(ck)) continue;
+    usedCompare.add(ck);
+    const direction = Math.random() > 0.3 ? 'bigger' : 'smaller';
+    questions.push({ type: 'compare', a, b, answer: direction === 'bigger' ? (a > b ? 0 : 1) : (a < b ? 0 : 1), direction });
+  }
+
+  // 如果算式数字在10以内，添加凑十法题
+  const bondCandidates = allEqNums.filter(n => n >= 1 && n <= 9);
+  if (bondCandidates.length >= 2) {
+    const usedBond = new Set();
+    for (const n of bondCandidates) {
+      if (usedBond.has(n) || questions.length >= 14) continue;
+      const partner = 10 - n;
+      if (partner < 1 || partner > 9) continue;
+      usedBond.add(n);
+      usedBond.add(partner);
+      const opts = shuffleArr([partner, ...generateWrongAnswers(partner, 3).filter(x => x !== partner && x > 0 && x < 10)]);
+      if (opts.length < 2) continue;
+      const ansIdx = opts.indexOf(partner);
+      if (ansIdx < 0) continue;
+      questions.push({ type: 'bond', number: n, options: opts, answer: ansIdx });
+      if (questions.length >= 14) break;
+    }
+  }
+
+  // 如果有多组配对，生成连线题
+  for (const mp of matchPairs) {
+    if (mp.left.length >= 2) {
+      const answer = mp.left.map((_, i) => [i, i]);
+      questions.push({ type: 'match', left: mp.left.map(eq => eq + '=?'), right: mp.right, answer });
+    }
+  }
+
+  // 如果题目太少，用填空/拖拽补充
+  if (equations.length > 0 && questions.length < 3) {
+    for (const eq of equations) {
+      const q = eq.left + ' = ?';
+      // 检查是否已有这个题目
+      if (!questions.some(qq => qq.question === q)) {
+        questions.push({ type: 'input', question: q, answer: eq.right });
+      }
+    }
+  }
+
+  // 如果只有零星算式，为每个算式生成选择题
+  if (questions.length === 0 && equations.length > 0) {
+    for (const eq of equations) {
+      const ans = parseInt(eq.right);
+      if (isNaN(ans)) continue;
+      const q = eq.left + ' = ?';
+      const options = generateWrongAnswers(ans, 3);
+      const shuffled = shuffleArr([ans, ...options]);
+      const ansIdx = shuffled.indexOf(ans);
+      questions.push({ type: 'choice', question: q, options: shuffled.map(String), answer: ansIdx });
+    }
+  }
+
+  // 如果没有算式但有数学关键词，从文本中提取数值范围生成练习题
+  if (questions.length === 0 && mathKwLines.length >= 2) {
+    const allText = allLines.join(' ');
+    let minNum = 1, maxNum = 20;
+
+    // 尝试提取 "10-20以内" 这种范围
+    const rangeMatch = allText.match(/(\d+)\s*[-~～]\s*(\d+)\s*以内/);
+    if (rangeMatch) {
+      minNum = Math.min(parseInt(rangeMatch[1]), parseInt(rangeMatch[2]));
+      maxNum = Math.max(parseInt(rangeMatch[1]), parseInt(rangeMatch[2]));
+    } else {
+      // 提取文本中所有数字作为参考
+      const nums = allText.match(/\d+/g);
+      if (nums) {
+        const parsed = nums.map(Number).filter(n => n > 0 && n <= 100);
+        if (parsed.length >= 2) {
+          maxNum = Math.max(...parsed);
+          minNum = Math.min(...parsed);
+        }
+      }
+    }
+
+    // 确保范围合理
+    if (maxNum < 5) maxNum = 10;
+    if (minNum < 1) minNum = 1;
+
+    const hasBondKw = /凑十|补十|凑数/.test(allText);
+    const hasCompareKw = /比较|比大小|单双|相邻数/.test(allText);
+
+    // 生成各类互动题
+    const generated = new Set();
+    const targetCount = Math.min(8, Math.max(4, Math.floor((maxNum - minNum) / 2) + 2));
+    for (let attempt = 0; attempt < 40 && questions.length < targetCount; attempt++) {
+      const roll = Math.random();
+
+      // 比大小 (compare) ~25%
+      if (roll < 0.25 || hasCompareKw) {
+        const a = minNum + Math.floor(Math.random() * (maxNum - minNum + 1));
+        const b = minNum + Math.floor(Math.random() * (maxNum - minNum + 1));
+        if (a === b) continue;
+        const keyC = `cmp:${Math.min(a,b)}-${Math.max(a,b)}`;
+        if (generated.has(keyC)) continue;
+        generated.add(keyC);
+        const direction = Math.random() > 0.3 ? 'bigger' : 'smaller';
+        const answer = direction === 'bigger' ? (a > b ? 0 : 1) : (a < b ? 0 : 1);
+        questions.push({ type: 'compare', a, b, answer, direction });
+        continue;
+      }
+
+      // 凑十法 (bond) ~20%
+      if (roll < 0.45 || hasBondKw) {
+        const n = 1 + Math.floor(Math.random() * 9);
+        const keyB = `bond:${n}`;
+        if (generated.has(keyB)) continue;
+        generated.add(keyB);
+        const partner = 10 - n;
+        const opts = shuffleArr([partner, ...generateWrongAnswers(partner, 3).filter(x => x !== partner && x > 0 && x < 10)]);
+        if (opts.length < 2) continue;
+        const ansIdx = opts.indexOf(partner);
+        if (ansIdx < 0) continue;
+        questions.push({ type: 'bond', number: n, options: opts, answer: ansIdx });
+        continue;
+      }
+
+      // 判断对错 (judge) ~25%
+      if (roll < 0.70) {
+        const isAdd = Math.random() > 0.4;
+        const a = minNum + Math.floor(Math.random() * (maxNum - minNum));
+        const b = 1 + Math.floor(Math.random() * Math.min(9, maxNum - 1));
+        const correctAns = isAdd ? a + b : a - b;
+        if (correctAns < 0) continue;
+        const isRight = Math.random() > 0.4;
+        const shownAns = isRight ? correctAns : correctAns + (Math.random() > 0.5 ? 1 : -1) * (1 + Math.floor(Math.random() * 3));
+        if (shownAns < 0) continue;
+        const keyJ = `judge:${a}+${b}=${shownAns}`;
+        if (generated.has(keyJ)) continue;
+        generated.add(keyJ);
+        const display = `${a} ${isAdd ? '+' : '-'} ${b} = ${shownAns}`;
+        const answer = isRight ? 1 : 0;
+        questions.push({ type: 'judge', display, answer });
+        continue;
+      }
+
+      // 传统选择题 ~30%
+      const isAdd = Math.random() > 0.4;
+      let a, b, result;
+      if (isAdd) {
+        a = minNum + Math.floor(Math.random() * (maxNum - minNum));
+        b = 1 + Math.floor(Math.random() * Math.min(10, maxNum - a));
+        result = a + b;
+        if (result > maxNum) continue;
+      } else {
+        a = minNum + Math.floor(Math.random() * (maxNum - minNum + 1));
+        b = 1 + Math.floor(Math.random() * Math.min(a, 10));
+        result = a - b;
+        if (result < 0) continue;
+      }
+      const key = `${a}+${b}`;
+      if (generated.has(key)) continue;
+      generated.add(key);
+      const q = `${a} ${isAdd ? '+' : '-'} ${b} = ?`;
+      const ans = result;
+      const options = generateWrongAnswers(ans, 3);
+      const shuffled = shuffleArr([ans, ...options]);
+      questions.push({ type: 'choice', question: q, options: shuffled.map(String), answer: shuffled.indexOf(ans) });
+    }
+  }
+
+  // ===== 检测学习主题，生成专项互动题 =====
+  const allText = allLines.join(' ');
+
+  // --- 立体图形 ---
+  if (/立体图形|正方体|长方体|圆柱体|球体/.test(allText)) {
+    const shapeList = [
+      { name: '正方体', desc: '6个面都是正方形', emoji: '🧊' },
+      { name: '长方体', desc: '6个面，有长有宽', emoji: '📦' },
+      { name: '圆柱体', desc: '上下两个圆', emoji: '🥫' },
+      { name: '球体', desc: '到处是圆的', emoji: '⚽' }
+    ];
+    // 找出题目中提到的形状
+    const mentioned = shapeList.filter(s => allText.includes(s.name));
+    const targetShapes = mentioned.length >= 2 ? mentioned : shapeList;
+
+    if (targetShapes.length >= 2) {
+      // 形状识别题: "找出正方体"
+      for (const shape of targetShapes.slice(0, 3)) {
+        const opts = shuffleArr([shape.name, ...targetShapes.filter(s => s.name !== shape.name).map(s => s.name).slice(0, 3)]);
+        if (opts.length < 2) continue;
+        questions.push({
+          type: 'shape',
+          question: `下面哪个是「${shape.name}」？`,
+          options: opts,
+          answer: opts.indexOf(shape.name)
+        });
+      }
+      // 形状特征题: "正方体有几个面？"
+      const shapeFacts = [
+        { name: '正方体', q: '正方体有几个面？', a: '6个', opts: ['4个', '6个', '8个', '12个'] },
+        { name: '球体', q: '球体是什么形状的？', a: '圆圆的', opts: ['方方的', '圆圆的', '长长的', '尖尖的'] },
+        { name: '长方体', q: '长方体有几个面？', a: '6个', opts: ['4个', '6个', '8个', '12个'] },
+      ];
+      for (const fact of shapeFacts) {
+        if (allText.includes(fact.name) && questions.length < 18) {
+          const opts = shuffleArr(fact.opts);
+          questions.push({ type: 'choice', question: fact.q, options: opts, answer: opts.indexOf(fact.a) });
+        }
+      }
+    }
+  }
+
+  // --- 单双数 ---
+  if (/单数|双数|奇数|偶数/.test(allText) && questions.length < 20) {
+    const testNums = [3, 7, 4, 8, 5, 9, 6, 2];
+    const available = testNums;
+    for (const n of available.slice(0, 3)) {
+      const isOdd = n % 2 !== 0;
+      const opts = shuffleArr(['单数', '双数']);
+      questions.push({
+        type: 'oddeven',
+        number: n,
+        options: opts,
+        answer: opts.indexOf(isOdd ? '单数' : '双数')
+      });
+    }
+  }
+
+  // --- 相邻数 ---
+  if (/相邻/.test(allText) && questions.length < 20) {
+    const neighbors = [
+      { n: 3, prev: 2, next: 4 },
+      { n: 7, prev: 6, next: 8 },
+      { n: 5, prev: 4, next: 6 },
+      { n: 9, prev: 8, next: 10 }
+    ];
+    for (const item of neighbors) {
+      if (questions.length >= 18) break;
+      const isPrev = Math.random() > 0.4;
+      const correct = isPrev ? item.prev : item.next;
+      const opts = shuffleArr([correct, correct + 1, correct - 1].filter(x => x > 0));
+      if (opts.length < 2) continue;
+      questions.push({
+        type: 'neighbor',
+        number: item.n,
+        direction: isPrev ? 'before' : 'after',
+        options: opts,
+        answer: opts.indexOf(correct)
+      });
+    }
+  }
+
+  // --- 钟表 ---
+  if (/钟表|整点|半点|时钟/.test(allText) && questions.length < 20) {
+    const clockQuestions = [
+      { q: '3点整，分针指向数字几？', a: '12', opts: ['3', '6', '9', '12'] },
+      { q: '6点整，时针指向数字几？', a: '6', opts: ['3', '6', '9', '12'] },
+      { q: '12点整，时针和分针都指向？', a: '12', opts: ['6', '12', '3', '9'] },
+      { q: '半个小时有几分？', a: '30', opts: ['15', '30', '45', '60'] },
+    ];
+    for (const cq of clockQuestions) {
+      if (questions.length >= 18) break;
+      const opts = shuffleArr(cq.opts);
+      questions.push({ type: 'choice', question: cq.q, options: opts, answer: opts.indexOf(cq.a) });
+    }
+  }
+
+  return { title, goal, methods, questions, homework };
+}
+
+// 生成干扰选项（在正确答案附近调整）
+function generateWrongAnswers(correct, count) {
+  const wrongs = new Set();
+  const offsets = [1, -1, 2, -2, 10, -10, 5, -5, 3, -3];
+  for (const off of offsets) {
+    if (wrongs.size >= count) break;
+    const w = correct + off;
+    if (w !== correct && w > 0 && w < 200) wrongs.add(w);
+  }
+  // 如果不够，补一些随机数
+  while (wrongs.size < count) {
+    const w = correct + Math.floor(Math.random() * 10) + 1;
+    if (w !== correct && w > 0) wrongs.add(w);
+  }
+  return [...wrongs].slice(0, count);
+}
+
+function shuffleArr(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ===== 智能解析：拼音 =====
+function smartParsePinyin(pinyinExLines, allLines, pinyinKwLines) {
+  let title = '';
+  for (const line of allLines) {
+    if (/标题|^后鼻|^前鼻|^复韵|^整体|拼音/.test(line) && line.length < 50) {
+      title = line.replace(/^.*?[:：]/, '').trim();
+      break;
+    }
+  }
+  if (!title) title = '拼音练习';
+
+  const homework = [];
+  for (const line of allLines) {
+    if (/作业|复习|完成|背诵|订正|签名|朗读|描红/.test(line)) {
+      const text = line.replace(/^.*?[:：]/, '').trim();
+      if (text && text.length > 2) homework.push(text);
+    }
+  }
+
+  const content = [];
+  let mainLetter = '';
+  let mainRhyme = '';
+
+  for (const line of pinyinExLines) {
+    // 识别带声调的拼音字母（主要字母）
+    const letterMatch = line.match(/^([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]{1,6})\s*[1-4]?$/);
+    if (letterMatch && !line.includes('=') && !line.includes('→')) {
+      mainLetter = letterMatch[1].replace(/[1-4]/, '');
+    }
+
+    // 识别口诀/儿歌
+    if (/口诀|儿歌|蜜蜂|一只|发音/.test(line) || (line.includes(mainLetter) && line.length > 8)) {
+      mainRhyme = line;
+    }
+
+    // 识别拼读: b-eng→beng
+    if (/[a-z]+[-‐→➡️][a-z]/.test(line)) {
+      content.push({ type: 'example', text: line });
+    }
+
+    // 识别注意事项
+    if (/注意|不能|不可以|不要/.test(line)) {
+      content.push({ type: 'warning', text: line });
+    }
+  }
+
+  // === 第二步：如果还没找到 mainLetter，从所有行中提取嵌入汉语句子的拼音 ===
+  if (!mainLetter) {
+    const letterCounts = {};
+    for (const line of allLines) {
+      const seqs = line.match(/[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]{1,6}/g);
+      if (seqs) {
+        for (const s of seqs) {
+          if (/^[bpmfdtnlgkhjqxzcsryw]+$/.test(s) && s.length > 2) continue;
+          letterCounts[s] = (letterCounts[s] || 0) + 1;
+        }
+      }
+    }
+    const sorted = Object.entries(letterCounts).sort((a, b) => b[1] - a[1]);
+    for (const [letter, count] of sorted) {
+      if (/[aeiouāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(letter) && letter.length >= 2) {
+        mainLetter = letter;
+        break;
+      }
+    }
+    if (!mainLetter && sorted.length > 0) {
+      mainLetter = sorted[0][0];
+    }
+  }
+
+  // === 第三步：从所有行中提取口诀/儿歌 ===
+  if (!mainRhyme) {
+    for (const line of allLines) {
+      if (mainLetter && line.includes(mainLetter) && line.length > 6 && line.length < 40) {
+        if (/儿歌|口诀|蜜蜂|老鹰|一只|发音/.test(line) || !/[:：]/.test(line)) {
+          mainRhyme = line;
+          break;
+        }
+      }
+    }
+  }
+
+  // 如果找到主要字母，加入字母卡片，并补全内容
+  if (mainLetter) {
+    // 从所有行中提取注意事项
+    for (const line of allLines) {
+      if (/注意|不能|不可以|不要/.test(line) && !content.some(c => c.type === 'warning' && c.text === line)) {
+        content.push({ type: 'warning', text: line });
+      }
+    }
+    // 从所有行中提取拼读示例
+    if (!content.some(c => c.type === 'example')) {
+      for (const line of allLines) {
+        if (line.includes('➡️') || line.includes('→') || /[a-z]+[-‐][a-z]/.test(line)) {
+          if (!content.some(c => c.text === line)) {
+            content.push({ type: 'example', text: line });
+          }
+        }
+      }
+    }
+    content.unshift({
+      type: 'letter',
+      letter: mainLetter,
+      rhyme: mainRhyme || '',
+      note: '点击 🔊 听发音'
+    });
+  }
+
+  // 生成题目
+  const questions = [];
+
+  // 从拼读示例生成选择题 — 正确提取 → 后的完整音节
+  const pinduExamples = content.filter(c => c.type === 'example');
+  for (const ex of pinduExamples) {
+    // 用全局正则提取所有 "b-ing→bing" 模式（prefix + base → result）
+    const pattern = /([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+)\s*[-‐]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+)\s*[→➡][️\s]*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+)/g;
+    let m;
+    while ((m = pattern.exec(ex.text)) !== null) {
+      const prefix = m[1];   // b
+      const base = m[2];     // ing
+      const result = m[3];   // bing
+      if (mainLetter && base.includes(mainLetter)) {
+        // 正向题: b + ing 拼出来是？
+        const wrongs = generateFakePinyin(result, mainLetter, 3);
+        const options1 = shuffleArr([result, ...wrongs]);
+        const ansIdx1 = options1.indexOf(result);
+        if (ansIdx1 >= 0) {
+          questions.push({
+            type: 'choice',
+            question: `${prefix} + ${mainLetter} 拼出来是？`,
+            options: options1,
+            answer: ansIdx1
+          });
+        }
+        // 反向题: b + ___ → bing  填入韵母
+        if (questions.length < 10) {
+          const fakeBases = generateFakePinyin(mainLetter, mainLetter, 3);
+          const options2 = shuffleArr([mainLetter, ...fakeBases]);
+          const ansIdx2 = options2.indexOf(mainLetter);
+          if (ansIdx2 >= 0 && questions.length < 10) {
+            questions.push({
+              type: 'fill',
+              question: `${prefix} + ___ → ${result}`,
+              options: options2,
+              answer: ansIdx2
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // 如果题目不够，生成听力题补足
+  if (questions.length < 5 && mainLetter) {
+    const fakeLetter = generateFakePinyin(mainLetter, mainLetter, 3);
+    const opts1 = shuffleArr([mainLetter, ...fakeLetter]);
+    const ansIdx1 = opts1.indexOf(mainLetter);
+    if (ansIdx1 >= 0) {
+      questions.push({
+        type: 'listen',
+        audio: mainLetter,
+        options: opts1,
+        answer: ansIdx1
+      });
+    }
+  }
+
+  // 如果还没有题目，生成一个简单选择题保底
+  if (questions.length === 0 && mainLetter) {
+    const opts3 = shuffleArr([mainLetter, ...generateFakePinyin(mainLetter, mainLetter, 3)]);
+    const ansIdx3 = opts3.indexOf(mainLetter);
+    if (ansIdx3 >= 0) {
+      questions.push({
+        type: 'choice',
+        question: `哪个拼音是"${mainLetter}"？`,
+        options: opts3,
+        answer: ansIdx3
+      });
+    }
+  }
+
+  return { title, content, questions, homework };
+}
+
+function generateFakePinyin(real, base, count) {
+  const fakes = new Set();
+  // 替换韵母
+  const vowels = 'aeio';
+  for (let i = 0; i < vowels.length; i++) {
+    if (fakes.size >= count) break;
+    const fake = real.replace(/[aeio]+/, vowels[i]);
+    if (fake !== real) fakes.add(fake);
+  }
+  // 加前缀
+  const prefixes = 'd,t,g,k,h,j,q,x,z,c,s,zh,ch,sh'.split(',');
+  for (const p of prefixes) {
+    if (fakes.size >= count) break;
+    if (!real.startsWith(p)) {
+      const fake = p + base;
+      if (fake !== real) fakes.add(fake);
+    }
+  }
+  return [...fakes].slice(0, count);
+}
+
+// ===== 智能解析：识字 =====
+function smartParseZi(ziPairLines, allLines, ziKwLines) {
+  let title = '';
+  for (const line of allLines) {
+    if (/标题|^阶梯|^识字|^认字|今日|《/.test(line) && line.length < 50) {
+      title = line.replace(/^.*?[:：]/, '').trim();
+      break;
+    }
+  }
+  if (!title) title = '识字练习';
+
+  const homework = [];
+  for (const line of allLines) {
+    if (/作业|复习|完成|背诵|订正|签名|书写|指读|朗读/.test(line)) {
+      const text = line.replace(/^.*?[:：]/, '').trim();
+      if (text && text.length > 2) homework.push(text);
+    }
+  }
+
+  const words = [];
+
+  for (const line of ziPairLines) {
+    // "词语（拼音）" 格式: 贝壳（bèi ké）
+    let wpMatch = line.match(/^([一-鿿]+)[（(]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]*)\s*[)）]/);
+    if (wpMatch) {
+      const chars = wpMatch[1].split('');
+      const pinyins = wpMatch[2].trim().split(/\s+/);
+      for (let i = 0; i < chars.length && i < pinyins.length; i++) {
+        const idx = words.findIndex(w => w.zi === chars[i]);
+        if (idx >= 0) {
+          if (!words[idx].pinyin) words[idx].pinyin = pinyins[i].replace(/[1-4]$/, '');
+        } else {
+          words.push({ zi: chars[i], pinyin: pinyins[i].replace(/[1-4]$/, ''), stroke: '', count: 0, word: '' });
+        }
+      }
+      continue;
+    }
+
+    // "序号. 字（N画）：笔顺" 格式: 1. 贝（4画）：竖 → 横折
+    let sMatch = line.match(/^\d+[.、]\s*([一-鿿])\s*（(\d+)画）[：:]\s*(.+)/);
+    if (sMatch) {
+      const zi = sMatch[1];
+      const count = parseInt(sMatch[2]);
+      const strokes = sMatch[3].split(/[→➡️]/).map(s => s.trim().replace(/[\/、]+$/, '')).filter(Boolean).join('、');
+      const idx = words.findIndex(w => w.zi === zi);
+      if (idx >= 0) {
+        words[idx].count = count;
+        if (!words[idx].stroke) words[idx].stroke = strokes;
+      } else {
+        words.push({ zi, pinyin: '', stroke: strokes, count, word: '' });
+      }
+      continue;
+    }
+
+    // "字（词语）" 格式: 大（大小）
+    let wm2 = line.match(/^([一-鿿])\s*[（(]\s*([一-鿿]{2,})\s*[）)]/);
+    if (wm2) {
+      const idx = words.findIndex(w => w.zi === wm2[1]);
+      if (idx >= 0) {
+        if (!words[idx].word) words[idx].word = wm2[2];
+      } else {
+        words.push({ zi: wm2[1], pinyin: '', stroke: '', count: 0, word: wm2[2] });
+      }
+      continue;
+    }
+
+    // Pattern: 汉字 pinyin 词语 【笔顺】笔画数
+    // 味 wèi 口味
+    let m = line.match(/^([一-鿿])\s+([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)\s*(.+)?$/);
+    if (!m) {
+      // Pattern: 用 | yòng | 用心 | 笔顺：...
+      m = line.match(/^([一-鿿])\s*[|｜]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
+    }
+    if (!m) {
+      // Pattern: 味：wèi，组词：口味
+      m = line.match(/^([一-鿿])\s*[：:]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
+    }
+
+    if (m) {
+      const zi = m[1];
+      let pinyin = m[2].replace(/[1-4]$/, '');
+      const rest = m[3] || '';
+
+      // 提取词语
+      let word = '';
+      const wm = rest.match(/([一-鿿]{2,})/);
+      if (wm) word = wm[1];
+
+      // 提取笔顺
+      let stroke = '';
+      const sm = (rest + line).match(/笔顺[：:]\s*([一-鿿、，,]+)/);
+      if (sm) stroke = sm[1];
+
+      // 提取笔画数
+      let count = 0;
+      const cm = (rest + line).match(/(\d+)画/);
+      if (cm) count = parseInt(cm[1]);
+
+      words.push({ zi, pinyin, stroke, count, word });
+    }
+  }
+
+  // 如果ziPairLines没有解析出字但有关键词行，尝试从逗号分隔的列表中提取
+  if (words.length === 0 && ziKwLines.length > 0) {
+    const skipChars = new Set('识字生字汉字认字字词词语笔顺组词读写序号');
+    for (const kl of ziKwLines) {
+      // 提取所有汉字字符，过滤掉常见标签字
+      const allChars = (kl.match(/[一-鿿]/g) || []).filter(c => !skipChars.has(c));
+      if (allChars.length >= 2) {
+        for (const ch of allChars) {
+          if (!words.find(w => w.zi === ch)) {
+            words.push({ zi: ch, pinyin: '', stroke: '', count: 0, word: '' });
+          }
+        }
+      }
+    }
+  }
+
+  // 生成题目
+  const questions = [];
+
+  for (const w of words) {
+    if (!w.pinyin) continue; // 跳过没有拼音的字
+    // 字→拼音
+    if (words.length >= 3) {
+      const options = shuffleArr([w.pinyin, ...words.filter(o => o.zi !== w.zi && o.pinyin).map(o => o.pinyin).slice(0, 3)]);
+      while (options.length < 4) options.push(w.pinyin + 'g');
+      const ansIdx = options.indexOf(w.pinyin);
+      if (ansIdx >= 0) {
+        questions.push({ type: 'zi2pinyin', zi: w.zi, options: options.slice(0, 4), answer: ansIdx });
+      }
+
+      // 拼音→字
+      const ziOptions = shuffleArr([w.zi, ...words.filter(o => o.zi !== w.zi).map(o => o.zi).slice(0, 3)]);
+      while (ziOptions.length < 4) ziOptions.push('字');
+      const ziAnsIdx = ziOptions.indexOf(w.zi);
+      if (ziAnsIdx >= 0) {
+        questions.push({ type: 'pinyin2zi', pinyin: w.pinyin, options: ziOptions.slice(0, 4), answer: ziAnsIdx });
+      }
+    }
+  }
+
+  // 连线题（字→词）
+  const matchable = words.filter(w => w.word);
+  if (matchable.length >= 2) {
+    const left = matchable.map(w => w.zi);
+    const right = matchable.map(w => w.word);
+    const answer = left.map((_, i) => [i, i]);
+    questions.push({ type: 'match', left, right, answer });
+  }
+
+  // 快速找字游戏 (quicktap) — 从有拼音的字中生成
+  const wordsWithPinyin = words.filter(w => w.pinyin);
+  if (wordsWithPinyin.length >= 3 && questions.length < 15) {
+    const usedQt = new Set();
+    for (const w of wordsWithPinyin) {
+      if (usedQt.has(w.zi) || questions.length >= 15) continue;
+      usedQt.add(w.zi);
+      const others = wordsWithPinyin.filter(x => x.zi !== w.zi).map(x => x.zi);
+      const opts = shuffleArr([w.zi, ...others.slice(0, Math.min(3, others.length))]);
+      if (opts.length < 2) continue;
+      questions.push({
+        type: 'quicktap',
+        target: w.zi,
+        options: opts,
+        answer: opts.indexOf(w.zi)
+      });
+    }
+  }
+
+  // 组词游戏 (compose) — 从有word配对的数据中生成
+  const hasWord = words.filter(w => w.word);
+  if (hasWord.length >= 2 && questions.length < 15) {
+    const usedCp = new Set();
+    for (const w of hasWord) {
+      const wordChars = w.word.split('');
+      if (wordChars.length < 2 || usedCp.has(w.word)) continue;
+      usedCp.add(w.word);
+      // 收集干扰字
+      const distractorChars = words.filter(x => !wordChars.includes(x.zi)).map(x => x.zi);
+      if (distractorChars.length < 1) continue;
+      const allOpts = shuffleArr([...wordChars, ...distractorChars.slice(0, 4 - wordChars.length)]);
+      if (allOpts.length < 2) continue;
+      questions.push({
+        type: 'compose',
+        word: w.word,
+        chars: allOpts,
+        answer: wordChars
+      });
+      if (questions.length >= 15) break;
+    }
+  }
+
+  // 如果没有任何题目但有字（没有拼音的情况），生成互动找字游戏
+  if (questions.length === 0 && words.length >= 3) {
+    const charList = words.map(w => w.zi);
+    for (let i = 0; i < Math.min(charList.length, 6); i++) {
+      const target = charList[i];
+      const others = charList.filter(c => c !== target);
+      const opts = shuffleArr([target, ...others.slice(0, Math.min(3, others.length))]);
+      if (opts.length < 2) continue;
+      questions.push({
+        type: 'quicktap',
+        target,
+        options: opts,
+        answer: opts.indexOf(target)
+      });
+    }
+  }
+
+  return { title, words, questions, homework };
+}
+
+// 根据输入生成游戏
+function generateFromInput() {
+  const textarea = document.getElementById('input-textarea');
+  const status = document.getElementById('input-status');
+  const text = textarea.value.trim();
+
+  if (!text) {
+    status.className = 'input-status error';
+    status.textContent = '⚠️ 请先粘贴学习内容';
+    return;
+  }
+
+  const parsed = parseContent(text);
+  let count = 0;
+
+  if (parsed.math) count++;
+  if (parsed.pinyin) count++;
+  if (parsed.zi) count++;
+
+  if (count === 0) {
+    status.className = 'input-status error';
+    status.textContent = '⚠️ 未识别到任何学习内容。需要算式（如 23+5=28）、拼音拼读（如 b-eng→beng）或汉字+拼音配对（如 味 wèi）';
+    return;
+  }
+
+  // 清除旧数据，只保留检测到的科目
+  mathData = null;
+  pinyinData = null;
+  ziData = null;
+
+  if (parsed.math) {
+    mathData = parsed.math;
+  }
+  if (parsed.pinyin) {
+    pinyinData = parsed.pinyin;
+  }
+  if (parsed.zi) {
+    ziData = parsed.zi;
+  }
+
+  // 保存到 localStorage
+  saveContentToLS(text);
+
+  // 更新科目按钮
+  updateSubjectButtons();
+
+  status.className = 'input-status success';
+  const names = [];
+  if (parsed.math) names.push('数学');
+  if (parsed.pinyin) names.push('拼音');
+  if (parsed.zi) names.push('识字');
+  status.textContent = `✅ 已生成 ${names.join('、')} 闯关内容！共 ${count} 个科目`;
+
+  // 关闭输入面板
+  setTimeout(() => {
+    document.getElementById('input-panel').classList.remove('open');
+    document.getElementById('input-toggle').textContent = '📝 输入今日学习内容';
+  }, 1500);
+}
+
+// 加载示例数据（自由格式，模拟老师发的内容）
+function loadDemoData() {
+  const textarea = document.getElementById('input-textarea');
+  textarea.value = `今日数学：50以内两位数加一位数
+掌握进位与不进位的计算方法
+不进位加法：个位相加，十位不变
+进位加法：把两位数拆成整十数和个位数
+23+5=28
+35+4=39
+32+6=38
+连线：21+3=24  34+5=39  17+2=19
+37+5=42
+作业：完成打印卷（需要解题过程）
+作业：作业明天带回
+
+后鼻韵母 eng
+一只蜜蜂 eng eng eng
+占中下格，先写en再写g
+b-eng→beng
+p-eng→peng
+注意：eng不可以和j、q、x、y相拼
+作业：完成书本p110-111页内容并复习三次
+作业：完成拼音描红本"eng"的内容
+作业：复习后鼻韵母ang、eng朗读卷一次
+
+阶梯识字《竹子》
+味 wèi 口味 笔顺：竖、横折、横、横、横、竖、撇、捺 8画
+用 yòng 用心 笔顺：撇、横折钩、横、横、竖 5画
+砍 kǎn 砍伐 笔顺：横、撇、竖、横折、横、撇、横钩、撇、捺 9画
+虽 suī 虽然 笔顺：竖、横折、横、竖、横折、横、竖、横、点 9画
+作业：完成第26页书写作业（注意书写笔顺）
+作业：指读书本第25页内容：识字、词语各3次`;
+  generateFromInput();
+}
+
+// 恢复已保存的内容
+function restoreSavedContent() {
+  const saved = loadContentFromLS();
+  if (saved) {
+    const parsed = parseContent(saved);
+    // 先清除所有，只保留检测到的
+    mathData = null;
+    pinyinData = null;
+    ziData = null;
+    if (parsed.math) { mathData = parsed.math; }
+    if (parsed.pinyin) { pinyinData = parsed.pinyin; }
+    if (parsed.zi) { ziData = parsed.zi; }
+    updateSubjectButtons();
+  }
+}
+
+// ============================================================
+// 🎵 音效系统
+// ============================================================
+const Sound = {
+  ctx: null,
+  _init() {
+    if (!this.ctx) {
+      try {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch(e) { /* silently fail */ }
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  },
+  _play(freq, duration, type, volume) {
+    try {
+      this._init();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      gain.gain.setValueAtTime(volume || 0.25, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime);
+      osc.stop(this.ctx.currentTime + duration);
+    } catch(e) {}
+  },
+  click() { this._play(800, 0.08, 'sine', 0.15); },
+  correct() {
+    this._play(523, 0.12);
+    setTimeout(() => this._play(659, 0.12), 100);
+    setTimeout(() => this._play(784, 0.25), 200);
+  },
+  wrong() {
+    this._play(400, 0.15, 'sawtooth', 0.12);
+    setTimeout(() => this._play(300, 0.25, 'sawtooth', 0.1), 150);
+  },
+  celebrate() {
+    const notes = [523, 587, 659, 784, 880, 1047];
+    notes.forEach((n, i) => {
+      setTimeout(() => this._play(n, 0.2, 'sine', 0.2), i * 100);
+    });
+  },
+  loseHeart() {
+    this._play(350, 0.15, 'sine', 0.15);
+    setTimeout(() => this._play(280, 0.2, 'sine', 0.1), 150);
+  },
+  starEarn() {
+    this._play(1047, 0.3, 'sine', 0.2);
+    setTimeout(() => this._play(1319, 0.4, 'sine', 0.2), 200);
+  }
+};
+
+// ============================================================
+// 🎊 撒花动画系统
+// ============================================================
+const Confetti = {
+  canvas: null,
+  ctx: null,
+  particles: [],
+  running: false,
+  animId: null,
+
+  init() {
+    this.canvas = document.getElementById('confetti-canvas');
+    if (!this.canvas) return;
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  },
+
+  resize() {
+    if (!this.canvas) return;
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
+
+  start() {
+    if (!this.canvas || !this.ctx) this.init();
+    if (!this.canvas) return;
+    this.particles = [];
+    const colors = ['#FF6B6B','#4FC3F7','#FFD54F','#81C784','#F48FB1','#FF9800','#CE93D8','#FF7043','#26C6DA','#AB47BC'];
+    for (let i = 0; i < 200; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height - this.canvas.height,
+        w: Math.random() * 12 + 5,
+        h: Math.random() * 8 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 3 + 1.5,
+        rot: Math.random() * 360,
+        rotSpeed: Math.random() * 8 - 4,
+        swing: Math.random() * 3 - 1.5,
+        swingAmp: Math.random() * 2 + 1,
+        phase: Math.random() * Math.PI * 2,
+        shape: Math.random() > 0.6 ? 'circle' : 'rect'
+      });
+    }
+    this.running = true;
+    this._animate();
+  },
+
+  stop() {
+    this.running = false;
+    if (this.animId) { cancelAnimationFrame(this.animId); this.animId = null; }
+    if (this.ctx) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  },
+
+  _animate() {
+    if (!this.running) return;
+    if (!this.ctx || !this.canvas) return;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.y += p.speed;
+      p.x += Math.sin(p.y * 0.02 + p.phase) * p.swingAmp * 0.5;
+      p.rot += p.rotSpeed;
+
+      this.ctx.save();
+      this.ctx.translate(p.x, p.y);
+      this.ctx.rotate(p.rot * Math.PI / 180);
+      this.ctx.fillStyle = p.color;
+      this.ctx.globalAlpha = Math.min(1, (this.canvas.height - p.y + 100) / 200);
+      if (p.shape === 'circle') {
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        this.ctx.fill();
+      } else {
+        this.ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      }
+      this.ctx.restore();
+
+      if (p.y > this.canvas.height + 30) {
+        this.particles.splice(i, 1);
+      }
+    }
+
+    // Add new particles to keep going
+    while (this.particles.length < 80) {
+      const colors = ['#FF6B6B','#4FC3F7','#FFD54F','#81C784','#F48FB1','#FF9800','#CE93D8'];
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: -20,
+        w: Math.random() * 12 + 5,
+        h: Math.random() * 8 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 3 + 1.5,
+        rot: Math.random() * 360,
+        rotSpeed: Math.random() * 8 - 4,
+        swing: Math.random() * 3 - 1.5,
+        swingAmp: Math.random() * 2 + 1,
+        phase: Math.random() * Math.PI * 2,
+        shape: Math.random() > 0.6 ? 'circle' : 'rect'
+      });
+    }
+
+    this.animId = requestAnimationFrame(() => this._animate());
+  }
+};
+
+// ============================================================
+// 🎮 游戏状态管理
+// ============================================================
+const state = {
+  subject: null,      // 'math', 'pinyin', 'zi'
+  subjectData: null,
+  questionIndex: 0,
+  hearts: 3,
+  maxHearts: 3,
+  stars: parseInt(localStorage.getItem('gameStars') || '0'),
+  isAnswering: false
+};
+
+function saveStars() {
+  localStorage.setItem('gameStars', String(state.stars));
+  document.getElementById('home-star-count').textContent = state.stars;
+}
+
+// 全局发音函数
+function speakText(text) {
+  try {
+    Sound._init();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 0.8;
+    utterance.pitch = 1.1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  } catch(e) {}
+}
+
+// ============================================================
+// 📄 页面导航
+// ============================================================
+function showPage(pageId) {
+  Confetti.stop();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  state.subject = null;
+  state.subjectData = null;
+  state.questionIndex = 0;
+  state.hearts = state.maxHearts;
+  saveStars();
+  showPage('page-home');
+}
+
+// ============================================================
+// 📚 知识点讲解页
+// ============================================================
+function enterSubject(subject) {
+  Sound.click();
+  state.subject = subject;
+  state.questionIndex = 0;
+  state.hearts = state.maxHearts;
+
+  const dataMap = { math: mathData, pinyin: pinyinData, zi: ziData };
+  state.subjectData = dataMap[subject];
+
+  const titleMap = { math: '🧮 今日数学小课堂', pinyin: '🔤 今日拼音小课堂', zi: '📚 今日识字小课堂' };
+  document.getElementById('knowledge-title').textContent = titleMap[subject];
+
+  renderKnowledgePage(subject);
+  showPage('page-knowledge');
+}
+
+function renderKnowledgePage(subject) {
+  const container = document.getElementById('knowledge-content');
+  container.innerHTML = '';
+
+  if (subject === 'math') {
+    // 数学知识点
+    const data = state.subjectData;
+    const goalCard = document.createElement('div');
+    goalCard.className = 'knowledge-card';
+    goalCard.innerHTML = `<h2>🎯 学习目标</h2><p>${data.goal}</p>`;
+    container.appendChild(goalCard);
+
+    const methodCard = document.createElement('div');
+    methodCard.className = 'knowledge-card';
+    let methodHTML = '<h2>💡 计算方法</h2>';
+    data.methods.forEach((m, i) => {
+      methodHTML += `<div class="knowledge-method-card">${i + 1}. ${m}</div>`;
+    });
+    methodCard.innerHTML = methodHTML;
+    container.appendChild(methodCard);
+
+  } else if (subject === 'pinyin') {
+    // 拼音知识点
+    const data = state.subjectData;
+    data.content.forEach(item => {
+      if (item.type === 'letter') {
+        const card = document.createElement('div');
+        card.className = 'knowledge-card';
+        card.innerHTML = `
+          <div class="knowledge-pinyin-letter">${item.letter}</div>
+          <div class="knowledge-pinyin-rhyme">📢 ${item.rhyme}</div>
+          <div style="font-size:20px;color:#8D6E63;text-align:center;padding:8px;">
+            ✍️ ${item.note}
+            <br>
+            <button class="play-sound-btn" onclick="speakText('${item.letter}')" style="margin-top:8px;">
+              🔊 点击发音
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      } else if (item.type === 'example') {
+        const card = document.createElement('div');
+        card.className = 'knowledge-card';
+        card.innerHTML = `<div class="knowledge-pinyin-example">${item.text}</div>`;
+        container.appendChild(card);
+      } else if (item.type === 'warning') {
+        const card = document.createElement('div');
+        card.className = 'knowledge-card';
+        card.innerHTML = `<div class="knowledge-pinyin-note">⚠️ ${item.text}</div>`;
+        container.appendChild(card);
+      }
+    });
+
+  } else if (subject === 'zi') {
+    // 识字知识点 - 字卡滑动
+    const data = state.subjectData;
+    const wordCard = document.createElement('div');
+    wordCard.className = 'knowledge-card';
+    wordCard.id = 'zi-knowledge-card';
+
+    let currentZiIndex = 0;
+
+    function renderZiCard(index) {
+      const w = data.words[index];
+      if (!w) return;
+      const strokes = w.stroke.split('、');
+      wordCard.innerHTML = `
+        <h2>📖 认识生字</h2>
+        <div class="knowledge-zi-card">
+          <div class="big-zi">${w.zi}</div>
+          <div class="zi-pinyin">
+            ${w.pinyin}
+            <button class="play-sound-btn" onclick="speakText('${w.zi}')" style="margin-left:8px;">🔊</button>
+          </div>
+          <div class="zi-detail">笔画数：${w.count}画</div>
+          <div class="zi-detail" style="margin-top:8px;font-weight:bold;">笔顺：</div>
+          <div class="stroke-animation" id="stroke-animation">
+            ${strokes.map((s, i) => `<span class="stroke-item" data-idx="${i}">${s}</span>`).join('')}
+          </div>
+          <div style="margin-top:12px;">
+            <span class="zi-word">📝 ${w.word}</span>
+          </div>
+          <div style="margin-top:12px;">
+            <button class="play-sound-btn" onclick="animateStrokes(${index}); this.textContent='🔄 再看一次';">
+              ✍️ 看笔顺
+            </button>
+          </div>
+        </div>
+        <div class="knowledge-zi-nav">
+          ${data.words.map((_, i) => `<button class="${i === index ? 'active' : ''}" onclick="switchZiCard(${i})">${i + 1}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    window.switchZiCard = function(idx) {
+      currentZiIndex = idx;
+      renderZiCard(idx);
+    };
+
+    window.animateStrokes = function(idx) {
+      const w = data.words[idx];
+      if (!w) return;
+      const strokes = w.stroke.split('、');
+      const items = document.querySelectorAll('.stroke-item');
+      items.forEach(el => el.classList.remove('active'));
+      items.forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.add('active');
+        }, i * 500);
+      });
+    };
+
+    renderZiCard(0);
+    container.appendChild(wordCard);
+  }
+}
+
+// ============================================================
+// 🎯 开始游戏
+// ============================================================
+function startGame() {
+  Sound.click();
+  state.questionIndex = 0;
+  state.hearts = state.maxHearts;
+  state.isAnswering = false;
+  document.getElementById('game-over-overlay').classList.remove('show');
+  showPage('page-game');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const data = state.subjectData;
+  const questions = data.questions;
+  const idx = state.questionIndex;
+
+  if (idx >= questions.length) {
+    onLevelComplete();
+    return;
+  }
+
+  // Update progress
+  const progress = ((idx) / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+
+  // Update hearts
+  updateHearts();
+
+  const q = questions[idx];
+  state.isAnswering = true;
+
+  const area = document.getElementById('question-area');
+  area.innerHTML = '';
+  area.style.display = 'flex';
+
+  // Render based on type
+  const renderers = {
+    choice: renderChoice,
+    input: renderInput,
+    drag: renderDrag,
+    match: renderMatch,
+    listen: renderListen,
+    tone: renderTone,
+    fill: renderFill,
+    zi2pinyin: renderChoice,
+    pinyin2zi: renderChoice,
+    stroke: renderChoice,
+    image: renderImage,
+    compare: renderCompare,
+    bond: renderBond,
+    judge: renderJudge,
+    shape: renderShape,
+    oddeven: renderOddEven,
+    neighbor: renderNeighbor,
+    quicktap: renderQuickTap,
+    compose: renderCompose
+  };
+
+  const renderFn = renderers[q.type] || renderChoice;
+  renderFn(area, q);
+}
+
+// ============================================================
+// 题型渲染
+// ============================================================
+
+// --- 选择题 (通用: choice, zi2pinyin, pinyin2zi, stroke) ---
+function renderChoice(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  if (q.type === 'zi2pinyin') text.textContent = `"${q.zi}" 的拼音是？`;
+  else if (q.type === 'pinyin2zi') text.textContent = `${q.pinyin} 对应的汉字是？`;
+  else if (q.type === 'stroke') text.textContent = q.question;
+  else text.textContent = q.question;
+  area.appendChild(text);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span style="font-size:20px;color:#9E9E9E;margin-right:8px;">${labels[i]}</span>${opt}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    // Touch support
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+function handleChoiceAnswer(btn, selected, answer, grid) {
+  if (!state.isAnswering) return;
+  const buttons = grid.querySelectorAll('.option-btn');
+  if (btn.classList.contains('disabled')) return;
+
+  state.isAnswering = false;
+  buttons.forEach(b => b.classList.add('disabled'));
+
+  if (selected === answer) {
+    btn.classList.add('correct');
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => {
+      state.questionIndex++;
+      renderQuestion();
+    }, 900);
+  } else {
+    btn.classList.add('wrong');
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      // Show correct answer after a moment
+      setTimeout(() => {
+        buttons[answer].classList.add('correct');
+        setTimeout(() => {
+          state.questionIndex++;
+          renderQuestion();
+        }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// --- 填空题 (数字键盘) ---
+function renderInput(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = q.question;
+  area.appendChild(text);
+
+  const display = document.createElement('div');
+  display.className = 'input-display';
+  display.id = 'input-display';
+  display.textContent = '?';
+  area.appendChild(display);
+
+  const pad = document.createElement('div');
+  pad.className = 'numpad';
+
+  let inputVal = '';
+  const answerStr = String(q.answer);
+
+  function updateDisplay() {
+    display.textContent = inputVal || '?';
+    display.classList.toggle('filled', inputVal.length > 0);
+  }
+
+  function confirmAnswer() {
+    if (!state.isAnswering || inputVal === '') return;
+    state.isAnswering = false;
+    pad.querySelectorAll('.numpad-btn').forEach(b => b.style.pointerEvents = 'none');
+
+    if (inputVal === answerStr) {
+      display.style.borderColor = '#4CAF50';
+      display.style.background = '#C8E6C9';
+      Sound.correct();
+      showFeedback(true);
+      setTimeout(() => {
+        state.questionIndex++;
+        renderQuestion();
+      }, 900);
+    } else {
+      display.style.borderColor = '#F44336';
+      display.style.background = '#FFCDD2';
+      Sound.wrong();
+      state.hearts--;
+      updateHearts();
+      showFeedback(false);
+      if (state.hearts <= 0) {
+        setTimeout(() => showGameOver(), 1000);
+      } else {
+        setTimeout(() => {
+          display.style.borderColor = '#4CAF50';
+          display.style.background = '#C8E6C9';
+          display.textContent = answerStr;
+          setTimeout(() => {
+            state.questionIndex++;
+            renderQuestion();
+          }, 1000);
+        }, 600);
+      }
+    }
+  }
+
+  // Number buttons
+  for (let i = 1; i <= 9; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'numpad-btn';
+    btn.textContent = i;
+    btn.addEventListener('click', () => { if (state.isAnswering) { inputVal += String(i); updateDisplay(); } });
+    pad.appendChild(btn);
+  }
+  const back = document.createElement('button');
+  back.className = 'numpad-btn back';
+  back.textContent = '⌫';
+  back.addEventListener('click', () => { if (state.isAnswering) { inputVal = inputVal.slice(0, -1); updateDisplay(); } });
+  pad.appendChild(back);
+
+  const zero = document.createElement('button');
+  zero.className = 'numpad-btn';
+  zero.textContent = '0';
+  zero.addEventListener('click', () => { if (state.isAnswering) { inputVal += '0'; updateDisplay(); } });
+  pad.appendChild(zero);
+
+  const conf = document.createElement('button');
+  conf.className = 'numpad-btn confirm';
+  conf.textContent = '确认';
+  conf.addEventListener('click', confirmAnswer);
+  pad.appendChild(conf);
+
+  area.appendChild(pad);
+}
+
+// --- 拖拽题 ---
+function renderDrag(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = q.question;
+  area.appendChild(text);
+
+  const dragArea = document.createElement('div');
+  dragArea.className = 'drag-area';
+
+  const equation = document.createElement('div');
+  equation.className = 'drag-equation';
+  // Split by □ to create the slot
+  const parts = q.question.split('□');
+  equation.innerHTML = (parts[0] || '') + ' <span class="drag-slot">?</span> ' + (parts[1] || '');
+  dragArea.appendChild(equation);
+
+  const numbersContainer = document.createElement('div');
+  numbersContainer.className = 'drag-numbers';
+  numbersContainer.id = 'drag-numbers';
+
+  const slot = equation.querySelector('.drag-slot');
+  let placedValue = null;
+
+  // Shuffle numbers
+  const shuffled = [...q.numbers].sort(() => Math.random() - 0.5);
+  shuffled.forEach((num) => {
+    const el = document.createElement('div');
+    el.className = 'drag-number';
+    el.textContent = num;
+    el.draggable = false;
+
+    // Touch drag
+    let touchClone = null;
+    el.addEventListener('touchstart', (e) => {
+      if (!state.isAnswering || el.classList.contains('placed')) return;
+      const touch = e.touches[0];
+      touchClone = el.cloneNode(true);
+      touchClone.style.position = 'fixed';
+      touchClone.style.pointerEvents = 'none';
+      touchClone.style.zIndex = '1000';
+      touchClone.style.width = el.offsetWidth + 'px';
+      touchClone.style.height = el.offsetHeight + 'px';
+      touchClone.style.left = (touch.clientX - el.offsetWidth / 2) + 'px';
+      touchClone.style.top = (touch.clientY - el.offsetHeight / 2) + 'px';
+      touchClone.style.opacity = '0.8';
+      document.body.appendChild(touchClone);
+      el.classList.add('dragging');
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (!touchClone) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      touchClone.style.left = (touch.clientX - el.offsetWidth / 2) + 'px';
+      touchClone.style.top = (touch.clientY - el.offsetHeight / 2) + 'px';
+      // Check if over slot
+      const slotRect = slot.getBoundingClientRect();
+      const isOver = touch.clientX >= slotRect.left && touch.clientX <= slotRect.right &&
+                     touch.clientY >= slotRect.top && touch.clientY <= slotRect.bottom;
+      slot.classList.toggle('drag-over', isOver);
+    }, { passive: false });
+
+    el.addEventListener('touchend', (e) => {
+      if (!touchClone) return;
+      const touch = e.changedTouches[0];
+      const slotRect = slot.getBoundingClientRect();
+      const isOver = touch.clientX >= slotRect.left && touch.clientX <= slotRect.right &&
+                     touch.clientY >= slotRect.top && touch.clientY <= slotRect.bottom;
+      document.body.removeChild(touchClone);
+      touchClone = null;
+      el.classList.remove('dragging');
+      slot.classList.remove('drag-over');
+
+      if (isOver && state.isAnswering) {
+        placedValue = num;
+        slot.textContent = num;
+        slot.classList.add('filled');
+        el.classList.add('placed');
+        checkDragAnswer(num, q.answer, slot, numbersContainer);
+      }
+    }, { passive: true });
+
+    // Mouse drag
+    el.addEventListener('mousedown', (e) => {
+      if (!state.isAnswering || el.classList.contains('placed')) return;
+      e.preventDefault();
+      const clone = el.cloneNode(true);
+      clone.style.position = 'fixed';
+      clone.style.pointerEvents = 'none';
+      clone.style.zIndex = '1000';
+      clone.style.width = el.offsetWidth + 'px';
+      clone.style.height = el.offsetHeight + 'px';
+      clone.style.left = (e.clientX - el.offsetWidth / 2) + 'px';
+      clone.style.top = (e.clientY - el.offsetHeight / 2) + 'px';
+      clone.style.opacity = '0.8';
+      document.body.appendChild(clone);
+      el.classList.add('dragging');
+
+      function onMove(ev) {
+        clone.style.left = (ev.clientX - el.offsetWidth / 2) + 'px';
+        clone.style.top = (ev.clientY - el.offsetHeight / 2) + 'px';
+        const sr = slot.getBoundingClientRect();
+        const over = ev.clientX >= sr.left && ev.clientX <= sr.right &&
+                     ev.clientY >= sr.top && ev.clientY <= sr.bottom;
+        slot.classList.toggle('drag-over', over);
+      }
+      function onUp(ev) {
+        document.body.removeChild(clone);
+        el.classList.remove('dragging');
+        slot.classList.remove('drag-over');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const sr = slot.getBoundingClientRect();
+        const over = ev.clientX >= sr.left && ev.clientX <= sr.right &&
+                     ev.clientY >= sr.top && ev.clientY <= sr.bottom;
+        if (over && state.isAnswering) {
+          placedValue = num;
+          slot.textContent = num;
+          slot.classList.add('filled');
+          el.classList.add('placed');
+          checkDragAnswer(num, q.answer, slot, numbersContainer);
+        }
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    numbersContainer.appendChild(el);
+  });
+  dragArea.appendChild(numbersContainer);
+  area.appendChild(dragArea);
+}
+
+function checkDragAnswer(val, answer, slot, container) {
+  if (!state.isAnswering) return;
+  state.isAnswering = false;
+  container.querySelectorAll('.drag-number').forEach(el => el.style.pointerEvents = 'none');
+
+  if (val === answer) {
+    slot.style.borderColor = '#4CAF50';
+    slot.style.background = '#C8E6C9';
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => {
+      state.questionIndex++;
+      renderQuestion();
+    }, 900);
+  } else {
+    slot.style.borderColor = '#F44336';
+    slot.style.background = '#FFCDD2';
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      setTimeout(() => {
+        slot.style.borderColor = '#4CAF50';
+        slot.style.background = '#C8E6C9';
+        slot.textContent = answer;
+        setTimeout(() => {
+          state.questionIndex++;
+          renderQuestion();
+        }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// --- 连线题 (通用: match) ---
+function renderMatch(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = '请将左右两边正确连线';
+  area.appendChild(text);
+
+  const matchArea = document.createElement('div');
+  matchArea.className = 'match-area';
+  matchArea.id = 'match-area';
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('match-svg');
+  svg.id = 'match-svg';
+  matchArea.appendChild(svg);
+
+  const leftCol = document.createElement('div');
+  leftCol.className = 'match-column';
+  const rightCol = document.createElement('div');
+  rightCol.className = 'match-column';
+
+  let selectedLeft = null;
+  let matchedPairs = [];
+  let leftMatched = new Set();
+  let rightMatched = new Set();
+
+  function updateLines() {
+    const svg = document.getElementById('match-svg');
+    if (!svg) return;
+    svg.innerHTML = '';
+    const areaRect = document.getElementById('match-area').getBoundingClientRect();
+
+    matchedPairs.forEach(([lIdx, rIdx]) => {
+      const leftEl = leftCol.children[lIdx];
+      const rightEl = rightCol.children[rIdx];
+      if (!leftEl || !rightEl) return;
+      const lr = leftEl.getBoundingClientRect();
+      const rr = rightEl.getBoundingClientRect();
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      const x1 = lr.left + lr.width - areaRect.left;
+      const y1 = lr.top + lr.height / 2 - areaRect.top;
+      const x2 = rr.left - areaRect.left;
+      const y2 = rr.top + rr.height / 2 - areaRect.top;
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#4CAF50');
+      line.setAttribute('stroke-width', '3');
+      line.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(line);
+    });
+  }
+
+  function isPairCorrect(lIdx, rIdx) {
+    return q.answer.some(([a, b]) => a === lIdx && b === rIdx);
+  }
+
+  function handleMatch(lIdx, rIdx) {
+    if (!state.isAnswering) return;
+    if (leftMatched.has(lIdx) || rightMatched.has(rIdx)) return;
+    if (selectedLeft === null) return;
+
+    const isCorrect = isPairCorrect(lIdx, rIdx);
+    if (isCorrect) {
+      Sound.correct();
+      matchedPairs.push([lIdx, rIdx]);
+      leftMatched.add(lIdx);
+      rightMatched.add(rIdx);
+      leftCol.children[lIdx].classList.add('matched');
+      rightCol.children[rIdx].classList.add('matched');
+      leftCol.children[lIdx].classList.remove('selected');
+      selectedLeft = null;
+      updateLines();
+
+      // Check if all matched
+      if (matchedPairs.length === q.left.length) {
+        state.isAnswering = false;
+        showFeedback(true);
+        setTimeout(() => {
+          state.questionIndex++;
+          renderQuestion();
+        }, 900);
+      }
+    } else {
+      Sound.wrong();
+      const rightEl = rightCol.children[rIdx];
+      rightEl.classList.add('wrong');
+      setTimeout(() => rightEl.classList.remove('wrong'), 500);
+      // Deselect left
+      if (selectedLeft !== null) {
+        leftCol.children[selectedLeft].classList.remove('selected');
+        selectedLeft = null;
+      }
+    }
+  }
+
+  q.left.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.textContent = item;
+    el.dataset.index = i;
+    el.addEventListener('click', () => {
+      if (!state.isAnswering || leftMatched.has(i)) return;
+      if (selectedLeft !== null) {
+        leftCol.children[selectedLeft].classList.remove('selected');
+      }
+      selectedLeft = i;
+      el.classList.add('selected');
+    });
+    leftCol.appendChild(el);
+  });
+
+  q.right.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.textContent = item;
+    el.dataset.index = i;
+    el.addEventListener('click', () => {
+      if (!state.isAnswering || rightMatched.has(i)) return;
+      if (selectedLeft !== null) {
+        handleMatch(selectedLeft, i);
+      }
+    });
+    rightCol.appendChild(el);
+  });
+
+  matchArea.appendChild(leftCol);
+  matchArea.appendChild(rightCol);
+  area.appendChild(matchArea);
+
+  // Update lines on resize
+  const ro = new ResizeObserver(() => updateLines());
+  ro.observe(matchArea);
+  setTimeout(updateLines, 100);
+}
+
+// --- 听力题 ---
+function renderListen(area, q) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'listen-area';
+
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = '点击播放，听一听是哪个拼音？';
+  wrapper.appendChild(text);
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'listen-btn';
+  playBtn.textContent = '🔊';
+  playBtn.addEventListener('click', () => {
+    playBtn.classList.add('playing');
+    Sound.click();
+    try {
+      const utterance = new SpeechSynthesisUtterance(q.audio);
+      utterance.lang = 'zh-CN';
+      utterance.rate = 0.7;
+      utterance.onend = () => playBtn.classList.remove('playing');
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    } catch(e) {
+      playBtn.classList.remove('playing');
+    }
+    // Fallback: remove playing after 2s
+    setTimeout(() => playBtn.classList.remove('playing'), 2000);
+  });
+  wrapper.appendChild(playBtn);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span style="font-size:20px;color:#9E9E9E;margin-right:8px;">${labels[i]}</span>${opt}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  wrapper.appendChild(grid);
+  area.appendChild(wrapper);
+}
+
+// --- 声调题 ---
+function renderTone(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `"${q.pinyin}" 选对声调`;
+  area.appendChild(text);
+
+  const display = document.createElement('div');
+  display.className = 'tone-display';
+  display.textContent = q.display || q.pinyin;
+  area.appendChild(display);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.style.fontSize = '24px';
+    btn.innerHTML = `<span style="font-size:20px;color:#9E9E9E;margin-right:8px;">${labels[i]}</span>${opt}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// --- 填空题(拼音填空) ---
+function renderFill(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text fill-question';
+  text.innerHTML = q.question.replace(/___/g, '<span class="fill-blank">?</span>');
+  area.appendChild(text);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span style="font-size:20px;color:#9E9E9E;margin-right:8px;">${labels[i]}</span>${opt}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// --- 图片选择题(用文字代替图片) ---
+function renderImage(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `${q.pinyin} 对应的是哪个？`;
+  area.appendChild(text);
+
+  const grid = document.createElement('div');
+  grid.className = 'image-options';
+
+  const emojiMap = {
+    '杯子': '🥤', '书包': '🎒', '铅笔': '✏️', '尺子': '📏',
+    '苹果': '🍎', '香蕉': '🍌', '西瓜': '🍉', '葡萄': '🍇',
+    '小猫': '🐱', '小狗': '🐶', '小鸟': '🐦', '小鱼': '🐟',
+    '太阳': '☀️', '月亮': '🌙', '星星': '⭐', '云朵': '☁️'
+  };
+
+  q.images.forEach((img, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'image-option';
+    const emoji = emojiMap[img] || '📦';
+    btn.innerHTML = `<span style="font-size:48px;">${emoji}</span><span>${img}</span>`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => {
+      if (!state.isAnswering) return;
+      state.isAnswering = false;
+      grid.querySelectorAll('.image-option').forEach(el => el.style.pointerEvents = 'none');
+
+      if (i === q.answer) {
+        btn.style.borderColor = '#4CAF50';
+        btn.style.background = '#C8E6C9';
+        Sound.correct();
+        showFeedback(true);
+        setTimeout(() => {
+          state.questionIndex++;
+          renderQuestion();
+        }, 900);
+      } else {
+        btn.style.borderColor = '#F44336';
+        btn.style.background = '#FFCDD2';
+        Sound.wrong();
+        state.hearts--;
+        updateHearts();
+        showFeedback(false);
+        if (state.hearts <= 0) {
+          setTimeout(() => showGameOver(), 1000);
+        } else {
+          setTimeout(() => {
+            grid.children[q.answer].style.borderColor = '#4CAF50';
+            grid.children[q.answer].style.background = '#C8E6C9';
+            setTimeout(() => {
+              state.questionIndex++;
+              renderQuestion();
+            }, 1000);
+          }, 600);
+        }
+      }
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// ============================================================
+// 🎮 互动数学题型
+// ============================================================
+
+// --- 比大小 (compare) ---
+function renderCompare(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = q.direction === 'smaller' ? '哪个数字更小？' : '哪个数字更大？';
+  area.appendChild(text);
+
+  const container = document.createElement('div');
+  container.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:20px;width:100%;padding:20px 0;';
+
+  const cards = [q.a, q.b].map((num, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = `
+      width:120px;height:140px;background:${i === 0 ? 'linear-gradient(135deg,#FF9800,#FFB74D)' : 'linear-gradient(135deg,#42A5F5,#64B5F6)'};
+      border-radius:20px;display:flex;align-items:center;justify-content:center;
+      font-size:48px;font-weight:bold;color:#fff;cursor:pointer;
+      box-shadow:0 6px 20px rgba(0,0,0,0.15);transition:transform 0.2s, box-shadow 0.2s;
+      user-select:none;-webkit-user-select:none;
+    `;
+    card.textContent = num;
+    card.dataset.index = i;
+    card.addEventListener('click', () => handleCompareAnswer(card, i, q.answer, container));
+    card.addEventListener('touchstart', () => { card.style.transform = 'scale(0.95)'; }, { passive: true });
+    card.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      card.style.transform = '';
+      handleCompareAnswer(card, i, q.answer, container);
+    });
+    // hover animation
+    card.addEventListener('mouseenter', () => { card.style.transform = 'translateY(-8px)'; });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    return card;
+  });
+
+  container.appendChild(cards[0]);
+
+  const vs = document.createElement('div');
+  vs.style.cssText = 'font-size:32px;font-weight:bold;color:#9E9E9E;text-shadow:0 2px 4px rgba(0,0,0,0.1);';
+  vs.textContent = '⚡';
+  container.appendChild(vs);
+
+  container.appendChild(cards[1]);
+  area.appendChild(container);
+}
+
+function handleCompareAnswer(btn, selected, answer, container) {
+  if (!state.isAnswering) return;
+  state.isAnswering = false;
+  container.querySelectorAll('div').forEach(el => el.style.pointerEvents = 'none');
+
+  if (selected === answer) {
+    btn.style.transform = 'scale(1.15)';
+    btn.style.boxShadow = '0 0 0 4px #4CAF50, 0 6px 20px rgba(0,0,0,0.2)';
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => { state.questionIndex++; renderQuestion(); }, 900);
+  } else {
+    btn.style.transform = 'scale(0.85)';
+    btn.style.opacity = '0.6';
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      const correctBtn = container.querySelector(`[data-index="${answer}"]`);
+      setTimeout(() => {
+        correctBtn.style.transform = 'scale(1.15)';
+        correctBtn.style.boxShadow = '0 0 0 4px #4CAF50, 0 6px 20px rgba(0,0,0,0.2)';
+        setTimeout(() => { state.questionIndex++; renderQuestion(); }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// --- 凑十法 (bond) ---
+function renderBond(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `${q.number} + ? = 10`;
+  area.appendChild(text);
+
+  const display = document.createElement('div');
+  display.style.cssText = `
+    font-size:64px;font-weight:bold;color:#E65100;text-align:center;padding:16px;
+    margin:10px 0;background:#FFF3E0;border-radius:20px;width:100px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  `;
+  display.textContent = q.number;
+  area.appendChild(display);
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:300px;margin:0 auto;';
+
+  q.options.forEach((num, i) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = `
+      padding:20px;text-align:center;font-size:32px;font-weight:bold;background:#E3F2FD;
+      border-radius:16px;cursor:pointer;transition:all 0.2s;color:#1565C0;
+      box-shadow:0 3px 10px rgba(0,0,0,0.1);user-select:none;-webkit-user-select:none;
+    `;
+    btn.textContent = num;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleBondAnswer(btn, i, q.answer, grid, q.number));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleBondAnswer(btn, i, q.answer, grid, q.number);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+function handleBondAnswer(btn, selected, answer, grid, number) {
+  if (!state.isAnswering) return;
+  state.isAnswering = false;
+  grid.querySelectorAll('div').forEach(el => el.style.pointerEvents = 'none');
+
+  if (selected === answer) {
+    btn.style.background = '#C8E6C9';
+    btn.style.color = '#2E7D32';
+    btn.style.transform = 'scale(1.1)';
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => { state.questionIndex++; renderQuestion(); }, 900);
+  } else {
+    btn.style.background = '#FFCDD2';
+    btn.style.color = '#C62828';
+    btn.style.transform = 'scale(0.9)';
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      setTimeout(() => {
+        const correctBtn = grid.querySelector(`[data-index="${answer}"]`);
+        correctBtn.style.background = '#C8E6C9';
+        correctBtn.style.color = '#2E7D32';
+        correctBtn.style.transform = 'scale(1.05)';
+        setTimeout(() => { state.questionIndex++; renderQuestion(); }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// --- 判断对错 (judge) ---
+function renderJudge(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = '这个算式对吗？';
+  area.appendChild(text);
+
+  const eqDisplay = document.createElement('div');
+  eqDisplay.style.cssText = `
+    font-size:48px;font-weight:bold;color:#333;text-align:center;padding:24px 16px;
+    margin:16px 0;background:#fff;border-radius:20px;width:100%;
+    box-shadow:0 4px 16px rgba(0,0,0,0.1);letter-spacing:2px;
+  `;
+  eqDisplay.textContent = q.display;
+  area.appendChild(eqDisplay);
+
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:24px;justify-content:center;width:100%;margin-top:10px;';
+
+  const createBtn = (label, isCorrect) => {
+    const btn = document.createElement('div');
+    const isTrue = isCorrect;
+    btn.style.cssText = `
+      width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:48px;cursor:pointer;transition:all 0.2s;user-select:none;-webkit-user-select:none;
+      box-shadow:0 4px 16px rgba(0,0,0,0.15);
+    `;
+    if (isCorrect) {
+      btn.style.background = 'linear-gradient(135deg,#4CAF50,#81C784)';
+      btn.textContent = '✔️';
+    } else {
+      btn.style.background = 'linear-gradient(135deg,#F44336,#E57373)';
+      btn.textContent = '✖️';
+    }
+    btn.dataset.value = isCorrect ? '1' : '0';
+    btn.addEventListener('click', () => handleJudgeAnswer(btn, isCorrect, q.answer, btnRow));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleJudgeAnswer(btn, isCorrect, q.answer, btnRow);
+    });
+    btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.1)'; });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    return btn;
+  };
+
+  btnRow.appendChild(createBtn('✔️', true));
+  btnRow.appendChild(createBtn('✖️', false));
+  area.appendChild(btnRow);
+}
+
+function handleJudgeAnswer(btn, selectedBool, answer, row) {
+  if (!state.isAnswering) return;
+  state.isAnswering = false;
+  row.querySelectorAll('div').forEach(el => el.style.pointerEvents = 'none');
+
+  const isCorrect = (selectedBool === (answer === 1));
+  if (isCorrect) {
+    btn.style.transform = 'scale(1.2)';
+    btn.style.boxShadow = '0 0 0 4px #4CAF50, 0 6px 20px rgba(0,0,0,0.2)';
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => { state.questionIndex++; renderQuestion(); }, 900);
+  } else {
+    btn.style.transform = 'scale(0.8)';
+    btn.style.opacity = '0.5';
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      setTimeout(() => {
+        const correctVal = answer === 1 ? '1' : '0';
+        const correctBtn = row.querySelector(`[data-value="${correctVal}"]`);
+        correctBtn.style.transform = 'scale(1.2)';
+        correctBtn.style.boxShadow = '0 0 0 4px #4CAF50, 0 6px 20px rgba(0,0,0,0.2)';
+        setTimeout(() => { state.questionIndex++; renderQuestion(); }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// ============================================================
+// 🎯 专项题型：立体图形、单双数、相邻数
+// ============================================================
+
+// --- 立体图形识别 (shape) ---
+const SHAPE_EMOJI = { '正方体': '🧊', '长方体': '📦', '圆柱体': '🥫', '球体': '⚽' };
+
+function renderShape(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = q.question;
+  area.appendChild(text);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    const emoji = SHAPE_EMOJI[opt] || '🔷';
+    btn.innerHTML = `<span style="font-size:32px;margin-right:8px;">${emoji}</span><span style="font-size:18px;">${opt}</span>`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// --- 单双数 (oddeven) ---
+function renderOddEven(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `${q.number} 是单数还是双数？`;
+  area.appendChild(text);
+
+  const numDisplay = document.createElement('div');
+  numDisplay.style.cssText = `
+    font-size:72px;font-weight:bold;color:#E65100;text-align:center;padding:20px;
+    margin:10px 0;background:#FFF3E0;border-radius:24px;width:120px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  `;
+  numDisplay.textContent = q.number;
+  area.appendChild(numDisplay);
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:flex;gap:20px;justify-content:center;width:100%;margin-top:10px;';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = `
+      padding:20px 40px;text-align:center;font-size:28px;font-weight:bold;
+      border-radius:20px;cursor:pointer;transition:all 0.2s;user-select:none;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    `;
+    if (opt === '单数') {
+      btn.style.background = 'linear-gradient(135deg,#FF8A65,#FFAB91)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'linear-gradient(135deg,#64B5F6,#90CAF9)';
+      btn.style.color = '#fff';
+    }
+    btn.textContent = opt;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// --- 相邻数 (neighbor) ---
+function renderNeighbor(area, q) {
+  const dirText = q.direction === 'before' ? '前面' : '后面';
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `${q.number} 的${dirText}一个数是？`;
+  area.appendChild(text);
+
+  const display = document.createElement('div');
+  display.style.cssText = `
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    padding:16px;margin:10px 0;font-size:36px;font-weight:bold;
+  `;
+  display.innerHTML = `<span style="background:#FFF3E0;padding:12px 20px;border-radius:16px;color:#E65100;">${q.number}</span>
+    <span style="color:#9E9E9E;font-size:24px;">→</span>
+    <span style="background:#E3F2FD;padding:12px 20px;border-radius:16px;color:#1565C0;">?</span>`;
+  area.appendChild(display);
+
+  const grid = document.createElement('div');
+  grid.className = 'options-grid';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.style.fontSize = '28px';
+    btn.innerHTML = `<span style="font-size:20px;color:#9E9E9E;margin-right:8px;">${'ABCD'[i]}</span>${opt}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => handleChoiceAnswer(btn, i, q.answer, grid));
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleChoiceAnswer(btn, i, q.answer, grid);
+    });
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
+}
+
+// ============================================================
+// 🎮 识字互动游戏
+// ============================================================
+
+// --- 快速找字 (quicktap) ---
+function renderQuickTap(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `🔍 快找到「${q.target}」！`;
+  area.appendChild(text);
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;max-width:320px;margin:16px auto;';
+
+  const colors = ['#FF9800','#42A5F5','#AB47BC','#66BB6A','#EF5350','#26C6DA'];
+  const animations = ['bounceIn 0.4s ease','pulse 0.6s ease infinite alternate','fadeIn 0.5s ease','popIn 0.4s ease'];
+
+  q.options.forEach((opt, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = `
+      padding:24px;text-align:center;font-size:42px;font-weight:bold;
+      background:${colors[i % colors.length]};color:#fff;border-radius:20px;
+      cursor:pointer;user-select:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);
+      animation:${animations[i % animations.length]};
+      transition:transform 0.15s, box-shadow 0.15s;position:relative;
+    `;
+    card.textContent = opt;
+    card.dataset.index = i;
+    card.addEventListener('click', () => handleQuickTap(card, i, q.answer, grid, q.target));
+    card.addEventListener('touchstart', () => { card.style.transform = 'scale(0.9)'; }, { passive: true });
+    card.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      card.style.transform = '';
+      handleQuickTap(card, i, q.answer, grid, q.target);
+    });
+    grid.appendChild(card);
+  });
+  area.appendChild(grid);
+}
+
+function handleQuickTap(card, selected, answer, grid, target) {
+  if (!state.isAnswering) return;
+  state.isAnswering = false;
+  grid.querySelectorAll('div').forEach(el => el.style.pointerEvents = 'none');
+
+  if (selected === answer) {
+    card.style.transform = 'scale(1.2)';
+    card.style.boxShadow = '0 0 0 5px #FFD600, 0 8px 30px rgba(0,0,0,0.2)';
+    Sound.correct();
+    showFeedback(true);
+    setTimeout(() => { state.questionIndex++; renderQuestion(); }, 800);
+  } else {
+    card.style.animation = 'shake 0.4s ease';
+    card.style.opacity = '0.5';
+    Sound.wrong();
+    state.hearts--;
+    updateHearts();
+    showFeedback(false);
+    if (state.hearts <= 0) {
+      setTimeout(() => showGameOver(), 1000);
+    } else {
+      setTimeout(() => {
+        const correctCard = grid.querySelector(`[data-index="${answer}"]`);
+        correctCard.style.transform = 'scale(1.2)';
+        correctCard.style.boxShadow = '0 0 0 5px #FFD600, 0 8px 30px rgba(0,0,0,0.2)';
+        setTimeout(() => { state.questionIndex++; renderQuestion(); }, 1000);
+      }, 600);
+    }
+  }
+}
+
+// --- 组词游戏 (compose) ---
+function renderCompose(area, q) {
+  const text = document.createElement('div');
+  text.className = 'question-text';
+  text.textContent = `组成词语「${q.word}」`;
+  area.appendChild(text);
+
+  const slotArea = document.createElement('div');
+  slotArea.style.cssText = `
+    display:flex;gap:12px;justify-content:center;align-items:center;
+    min-height:70px;padding:16px;margin:10px 0;background:#FFF8E1;
+    border-radius:16px;border:2px dashed #FFB74D;width:100%;
+  `;
+  slotArea.id = 'compose-slots';
+
+  const charGrid = document.createElement('div');
+  charGrid.style.cssText = 'display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:10px 0;width:100%;';
+
+  // Track order of tapped chars
+  const selectedChars = [];
+
+  function updateSlots() {
+    slotArea.innerHTML = selectedChars.length === 0
+      ? '<span style="color:#BDBDBD;font-size:18px;">点下面的字组成词语</span>'
+      : selectedChars.map(c => `<span style="font-size:32px;font-weight:bold;color:#E65100;background:#FFF;padding:8px 14px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:2px solid #FFB74D;">${c}</span>`).join('');
+  }
+
+  function checkCompose() {
+    if (!state.isAnswering || selectedChars.length === 0) return;
+    state.isAnswering = false;
+    charGrid.querySelectorAll('div').forEach(el => el.style.pointerEvents = 'none');
+
+    const userWord = selectedChars.join('');
+    const correct = q.answer.join('');
+    if (userWord === correct) {
+      slotArea.style.borderColor = '#4CAF50';
+      slotArea.style.background = '#C8E6C9';
+      Sound.correct();
+      showFeedback(true);
+      setTimeout(() => { state.questionIndex++; renderQuestion(); }, 900);
+    } else {
+      slotArea.style.borderColor = '#F44336';
+      slotArea.style.background = '#FFCDD2';
+      Sound.wrong();
+      state.hearts--;
+      updateHearts();
+      showFeedback(false);
+      if (state.hearts <= 0) {
+        setTimeout(() => showGameOver(), 1000);
+      } else {
+        setTimeout(() => {
+          slotArea.style.borderColor = '#4CAF50';
+          slotArea.style.background = '#C8E6C9';
+          slotArea.innerHTML = correct.split('').map(c =>
+            `<span style="font-size:32px;font-weight:bold;color:#2E7D32;background:#FFF;padding:8px 14px;border-radius:10px;">${c}</span>`
+          ).join('');
+          setTimeout(() => { state.questionIndex++; renderQuestion(); }, 1000);
+        }, 600);
+      }
+    }
+  }
+
+  const colors2 = ['#FF7043','#42A5F5','#AB47BC','#66BB6A','#FFA726','#26C6DA'];
+  q.chars.forEach((ch, i) => {
+    const tile = document.createElement('div');
+    tile.style.cssText = `
+      padding:16px 20px;font-size:32px;font-weight:bold;background:${colors2[i % colors2.length]};
+      color:#fff;border-radius:14px;cursor:pointer;user-select:none;
+      box-shadow:0 4px 12px rgba(0,0,0,0.12);transition:all 0.2s;
+      animation:fadeIn 0.3s ease;min-width:60px;text-align:center;
+    `;
+    tile.textContent = ch;
+    tile.dataset.char = ch;
+    tile.addEventListener('click', () => {
+      if (!state.isAnswering || tile.classList.contains('used')) return;
+      tile.classList.add('used');
+      tile.style.opacity = '0.4';
+      tile.style.transform = 'scale(0.85)';
+      selectedChars.push(ch);
+      updateSlots();
+      // Auto-check when enough chars are selected
+      if (selectedChars.length === q.answer.length) {
+        setTimeout(() => checkCompose(), 300);
+      }
+    });
+    charGrid.appendChild(tile);
+  });
+
+  area.appendChild(slotArea);
+  area.appendChild(charGrid);
+}
+
+// ============================================================
+// 💖 爱心系统
+// ============================================================
+function updateHearts() {
+  const container = document.getElementById('hearts-display');
+  container.innerHTML = '';
+  for (let i = 0; i < state.maxHearts; i++) {
+    const span = document.createElement('span');
+    span.className = 'heart' + (i >= state.hearts ? ' lost' : '');
+    span.textContent = '❤️';
+    container.appendChild(span);
+  }
+}
+
+function showGameOver() {
+  document.getElementById('game-over-overlay').classList.add('show');
+  Sound.loseHeart();
+}
+
+function retryLevel() {
+  Sound.click();
+  state.questionIndex = 0;
+  state.hearts = state.maxHearts;
+  state.isAnswering = false;
+  document.getElementById('game-over-overlay').classList.remove('show');
+  renderQuestion();
+}
+
+// ============================================================
+// ✅ 即时反馈浮层
+// ============================================================
+let feedbackTimer = null;
+
+function showFeedback(isCorrect) {
+  const overlay = document.getElementById('feedback-overlay');
+  const icon = document.getElementById('feedback-icon');
+  overlay.className = 'feedback-overlay show';
+  overlay.classList.add(isCorrect ? 'correct' : 'wrong');
+  icon.textContent = isCorrect ? '✅' : '❌';
+
+  if (feedbackTimer) clearTimeout(feedbackTimer);
+  feedbackTimer = setTimeout(() => {
+    overlay.classList.remove('show');
+  }, 600);
+}
+
+// ============================================================
+// 🏆 通关
+// ============================================================
+function onLevelComplete() {
+  document.getElementById('progress-fill').style.width = '100%';
+  Sound.celebrate();
+  state.stars++;
+  saveStars();
+
+  setTimeout(() => {
+    showPage('page-celebration');
+    setTimeout(() => {
+      Sound.starEarn();
+      Confetti.start();
+    }, 300);
+  }, 500);
+}
+
+function goToHomework() {
+  Sound.click();
+  Confetti.stop();
+  renderHomework();
+  showPage('page-homework');
+}
+
+function renderHomework() {
+  const list = document.getElementById('homework-list');
+  list.innerHTML = '';
+  const homework = state.subjectData.homework || [];
+  homework.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'homework-item';
+    div.style.animationDelay = (i * 0.1) + 's';
+    div.innerHTML = `
+      <div class="check" data-idx="${i}" onclick="toggleHomeworkCheck(this)"></div>
+      <span>${item}</span>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function toggleHomeworkCheck(el) {
+  el.classList.toggle('done');
+  Sound.click();
+}
+
+// ============================================================
+// 🚀 初始化
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  Confetti.init();
+  saveStars();
+  updateSubjectButtons();
+  restoreSavedContent();
+
+  // Button click sounds
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn') || e.target.closest('.subject-btn')) {
+      Sound.click();
+    }
+  });
+
+  // === 点击题目语音播报 ===
+  document.addEventListener('click', (e) => {
+    const q = e.target.closest('.question-text, .fill-question, .tone-display');
+    if (q) {
+      const text = q.textContent.replace(/[🔊🔤🔢📚]/g, '').trim();
+      if (text) speakText(text);
+    }
+  });
+
+  // === 鼠标悬停语音播报按钮 ===
+  let hoverTimer = null;
+  document.addEventListener('mouseover', (e) => {
+    const target = e.target.closest(
+      '.subject-btn, .btn, .option-btn, .match-item, .image-option, ' +
+      '.numpad-btn, .drag-number, .knowledge-zi-nav button, .play-sound-btn'
+    );
+    if (!target) return;
+    // Skip the listen button (already has audio)
+    if (target.closest('.listen-btn')) return;
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(() => {
+      let text = target.innerText
+        .replace(/[🔢🔤📚🔄🎯🏠🦉⭐✅❌❤️🔊✍️📝💔⌫AB]/g, '')
+        .replace(/[ABCD]/g, '')
+        .trim();
+      if (text && text.length > 0 && text.length < 30) speakText(text);
+    }, 400);
+  }, true);
+});
+
+// Light tap sound for game interactions
+document.addEventListener('mousedown', (e) => {
+  if (e.target.closest('.numpad-btn') || e.target.closest('.drag-number') ||
+      e.target.closest('.match-item:not(.matched)') || e.target.closest('.image-option') ||
+      e.target.closest('.play-sound-btn')) {
+    Sound._play(600, 0.04, 'sine', 0.06);
+  }
+});
+
+// Prevent double-tap zoom on mobile (only on game elements)
+document.addEventListener('touchend', (e) => {
+  if (e.target.closest('.game-question-area') || e.target.closest('.match-item') ||
+      e.target.closest('.option-btn') || e.target.closest('.numpad-btn') ||
+      e.target.closest('.drag-number') || e.target.closest('.image-option') ||
+      e.target.closest('.listen-btn')) {
+    e.preventDefault();
+  }
+}, { passive: false });
+</script>
+</body>
+</html>
