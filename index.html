@@ -6,7 +6,7 @@
 <meta http-equiv="Expires" content="0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<!-- Build: 2026-05-31-v2 -->
+<!-- Build: 2026-06-01-v1 -->
 <title>幼升小闯关大冒险</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1187,23 +1187,42 @@ let pinyinData = {
 
 // ===== 识字数据 =====
 let ziData = {
-  title: "阶梯识字《竹子》",
+  title: "偏旁部首：大字头·广字头·弓字旁",
+  radicals: [
+    { name: "大字头", chars: ["奇", "牵", "奔"] },
+    { name: "广字头", chars: ["席", "店", "庄"] },
+    { name: "弓字旁", chars: ["张", "弯", "强"] }
+  ],
   words: [
-    { zi: "味", pinyin: "wèi", stroke: "竖、横折、横、横、横、竖、撇、捺", count: 8, word: "口味" },
-    { zi: "用", pinyin: "yòng", stroke: "撇、横折钩、横、横、竖", count: 5, word: "用心" },
-    { zi: "砍", pinyin: "kǎn", stroke: "横、撇、竖、横折、横、撇、横钩、撇、捺", count: 9, word: "砍伐" },
-    { zi: "虽", pinyin: "suī", stroke: "竖、横折、横、竖、横折、横、竖、横、点", count: 9, word: "虽然" }
+    { zi: "奇", pinyin: "qí", stroke: "横、撇、点、横、竖、横折、横、竖", count: 8, word: "奇怪", radical: "大字头" },
+    { zi: "牵", pinyin: "qiān", stroke: "横、撇、点、点、横钩、撇、横、横、竖", count: 9, word: "牵牛", radical: "大字头" },
+    { zi: "奔", pinyin: "bēn", stroke: "横、撇、捺、横、竖、横、撇、竖", count: 8, word: "奔跑", radical: "大字头" },
+    { zi: "席", pinyin: "xí", stroke: "点、横、撇、横、竖、竖、横、竖、横折钩、竖", count: 10, word: "出席", radical: "广字头" },
+    { zi: "店", pinyin: "diàn", stroke: "点、横、撇、竖、横、竖、横折、横", count: 8, word: "商店", radical: "广字头" },
+    { zi: "庄", pinyin: "zhuāng", stroke: "点、横、撇、横、竖、横", count: 6, word: "村庄", radical: "广字头" },
+    { zi: "张", pinyin: "zhāng", stroke: "横折、横、竖折折钩、撇、横、竖提、捺", count: 7, word: "张开", radical: "弓字旁" },
+    { zi: "弯", pinyin: "wān", stroke: "点、横、竖、竖、撇、点、横折、横、竖折折钩", count: 9, word: "弯腰", radical: "弓字旁" },
+    { zi: "强", pinyin: "qiáng", stroke: "横折、横、竖折折钩、竖、横折、横、竖、横折、横、竖、横、点", count: 12, word: "强大", radical: "弓字旁" }
   ],
   questions: [
-    { type: "zi2pinyin", zi: "味", options: ["wèi", "wēi", "wěi", "wèn"], answer: 0 },
-    { type: "pinyin2zi", pinyin: "yòng", options: ["月", "用", "有", "友"], answer: 1 },
-    { type: "match", left: ["砍", "虽", "骨"], right: ["虽然", "砍伐", "骨气"], answer: [[0,1], [1,0], [2,2]] },
-    { type: "stroke", zi: "用", question: '"用"字第一笔是什么？', options: ["横折钩", "撇", "横", "竖"], answer: 1 },
-    { type: "choice", question: '"用心"的"用"是哪个字？', options: ["月", "用", "有", "友"], answer: 1 }
+    { type: "zi2pinyin", zi: "奇", options: ["qí", "qiā", "qǐ", "qì"], answer: 0 },
+    { type: "pinyin2zi", pinyin: "qiān", options: ["奔", "牵", "张", "弯"], answer: 1 },
+    { type: "stroke", zi: "奇", question: '"奇"字第四笔是什么？', options: ["竖", "横", "点", "撇"], answer: 1 },
+    { type: "choice", question: '"奇怪"的"奇"是哪个字？', options: ["奇", "牵", "奇", "齐"], answer: 0 },
+    { type: "quicktap", target: "奔", options: ["奇", "牵", "奔", "强"], answer: 2 },
+    { type: "zi2pinyin", zi: "席", options: ["xié", "xí", "xǐ", "xì"], answer: 1 },
+    { type: "pinyin2zi", pinyin: "diàn", options: ["店", "席", "庄", "弯"], answer: 0 },
+    { type: "stroke", zi: "张", question: '"张"字第一笔是什么？', options: ["横折", "竖折折钩", "横", "撇"], answer: 0 },
+    { type: "choice", question: '「弯」字的偏旁是什么？', options: ["大字头", "广字头", "弓字旁", "竖心旁"], answer: 2 },
+    { type: "choice", question: '「席」字的偏旁是什么？', options: ["广字头", "大字头", "弓字旁", "草字头"], answer: 0 },
+    { type: "choice", question: '「牵」字共有几画？', options: ["8", "9", "10", "7"], answer: 1 },
+    { type: "choice", question: '「强」字共有几画？', options: ["11", "12", "13", "10"], answer: 1 },
+    { type: "match", left: ["席", "张", "奇"], right: ["出席", "张开", "奇怪"], answer: [[0,0], [1,1], [2,2]] }
   ],
   homework: [
-    "完成第26页书写作业（注意书写笔顺）",
-    "指读书本第25页内容：识字、词语各3次"
+    "完成44-46页内容（⚠️注意书写生字的书写笔顺）",
+    "今日作业分2次完成，先写每个汉字的前五个，周末完成后面6个",
+    "周末在家进行一次巩固复习。本次作业下周一交"
   ]
 };
 
@@ -1348,6 +1367,22 @@ function parseContent(text) {
     // 识字关键词（扩展）
     if (/识字|生字|汉字|笔顺|组词|认字|会认|会写|认一认|字词|词语|生字表|写字/.test(line)) {
       ziKwLines.push(line);
+    }
+    // 🌟 开头的汉字条目（新格式：🌟奇）
+    if (/^🌟[一-鿿]/.test(line)) {
+      ziPairLines.push(line);
+    }
+    // 偏旁部首相关行
+    if (/偏旁部首|大字头|广字头|弓字旁|新授/.test(line)) {
+      ziKwLines.push(line);
+    }
+    // 带•的拼音行（新格式：• 拼音：qí（常用）、jī）
+    if (/^[•·\-]\s*拼音\s*[:：]/.test(line)) {
+      ziPairLines.push(line);
+    }
+    // 带•的笔顺行（新格式：• 笔顺（8画）：横、撇、...）
+    if (/^[•·\-]\s*笔顺/.test(line)) {
+      ziPairLines.push(line);
     }
   }
 
@@ -2021,7 +2056,8 @@ function generateFakePinyin(real, base, count) {
   return [...fakes].slice(0, count);
 }
 
-// ===== 智能解析：识字 =====
+// ===== 智能解析：识字（支持新旧格式） =====
+// 新格式：含 🌟 标记、• 拼音 / 笔顺、偏旁部首信息
 function smartParseZi(ziPairLines, allLines, ziKwLines) {
   let title = '';
   for (const line of allLines) {
@@ -2041,93 +2077,164 @@ function smartParseZi(ziPairLines, allLines, ziKwLines) {
   }
 
   const words = [];
+  let radicals = []; // [{name, chars}]
 
-  for (const line of ziPairLines) {
-    // "词语（拼音）" 格式: 贝壳（bèi ké）
-    let wpMatch = line.match(/^([一-鿿]+)[（(]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]*)\s*[)）]/);
-    if (wpMatch) {
-      const chars = wpMatch[1].split('');
-      const pinyins = wpMatch[2].trim().split(/\s+/);
-      for (let i = 0; i < chars.length && i < pinyins.length; i++) {
-        const idx = words.findIndex(w => w.zi === chars[i]);
-        if (idx >= 0) {
-          if (!words[idx].pinyin) words[idx].pinyin = pinyins[i].replace(/[1-4]$/, '');
-        } else {
-          words.push({ zi: chars[i], pinyin: pinyins[i].replace(/[1-4]$/, ''), stroke: '', count: 0, word: '' });
+  // ===== Phase 1: 提取偏旁部首信息 =====
+  for (const line of allLines) {
+    const newMatch = line.match(/新授[：:]\s*(.+)/);
+    if (newMatch) {
+      const radicalNames = newMatch[1].split(/[，,、]/).map(s => s.trim()).filter(Boolean);
+      for (const rn of radicalNames) {
+        if (!radicals.find(r => r.name === rn)) {
+          radicals.push({ name: rn, chars: [] });
+        }
+      }
+    }
+  }
+
+  // ===== Phase 2: 从"识字："行提取字符顺序 =====
+  let charOrder = [];
+  for (const line of allLines) {
+    if (/识字[：:]\s*/.test(line)) {
+      const chars = (line.match(/[一-鿿]/g) || []).filter(c => !'识字认字生字偏旁部首新授'.includes(c));
+      if (chars.length >= 2) charOrder = chars;
+      break;
+    }
+  }
+
+  // 按顺序将字符分配到各偏旁部首组
+  if (radicals.length > 0 && charOrder.length > 0) {
+    const perGroup = Math.ceil(charOrder.length / radicals.length);
+    for (let i = 0; i < radicals.length; i++) {
+      const start = i * perGroup;
+      const end = Math.min(start + perGroup, charOrder.length);
+      radicals[i].chars = charOrder.slice(start, end);
+    }
+  }
+
+  // ===== Phase 3: 解析每个字的详细信息 =====
+  // 支持两种格式：
+  //   新格式: 🌟奇  \n  • 拼音：qí（常用）、jī  \n  • 笔顺（8画）：横、撇、点、...
+  //   旧格式: 汉字 pinyin 词语 笔顺：... N画
+
+  // 过渡变量：当前正在解析的字
+  let currentStarZi = '';
+
+  for (const line of allLines) {
+    // ---- 新格式：🌟汉字 ----
+    const starMatch = line.match(/^🌟([一-鿿])/);
+    if (starMatch) {
+      currentStarZi = starMatch[1];
+      if (!words.find(w => w.zi === currentStarZi)) {
+        words.push({ zi: currentStarZi, pinyin: '', stroke: '', count: 0, word: '' });
+      }
+      continue;
+    }
+
+    // ---- 新格式：• 拼音：qí（常用）、jī ----
+    const pyBullet = line.match(/^[•·\-]\s*拼音\s*[:：]\s*(.+)/);
+    if (pyBullet && currentStarZi) {
+      const pinyinPart = pyBullet[1];
+      // 提取主拼音（第一个带声调的拼音）
+      const mainPy = pinyinPart.match(/[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+/);
+      if (mainPy) {
+        const idx = words.findIndex(w => w.zi === currentStarZi);
+        if (idx >= 0 && !words[idx].pinyin) {
+          words[idx].pinyin = mainPy[0];
         }
       }
       continue;
     }
 
-    // "序号. 字（N画）：笔顺" 格式: 1. 贝（4画）：竖 → 横折
-    let sMatch = line.match(/^\d+[.、]\s*([一-鿿])\s*（(\d+)画）[：:]\s*(.+)/);
-    if (sMatch) {
-      const zi = sMatch[1];
-      const count = parseInt(sMatch[2]);
-      const strokes = sMatch[3].split(/[→➡️]/).map(s => s.trim().replace(/[\/、]+$/, '')).filter(Boolean).join('、');
-      const idx = words.findIndex(w => w.zi === zi);
+    // ---- 新格式：• 笔顺（N画）：横、撇、... ----
+    const strokeBullet = line.match(/^[•·\-]\s*笔顺[（(]\s*(\d+)\s*画[）)][：:]\s*(.+)/);
+    if (strokeBullet && currentStarZi) {
+      const count = parseInt(strokeBullet[1]);
+      const strokes = strokeBullet[2].replace(/[→➡️]/g, '、').split(/[、，,]/)
+        .map(s => s.trim()).filter(Boolean).join('、');
+      const idx = words.findIndex(w => w.zi === currentStarZi);
       if (idx >= 0) {
         words[idx].count = count;
         if (!words[idx].stroke) words[idx].stroke = strokes;
-      } else {
-        words.push({ zi, pinyin: '', stroke: strokes, count, word: '' });
       }
       continue;
-    }
-
-    // "字（词语）" 格式: 大（大小）
-    let wm2 = line.match(/^([一-鿿])\s*[（(]\s*([一-鿿]{2,})\s*[）)]/);
-    if (wm2) {
-      const idx = words.findIndex(w => w.zi === wm2[1]);
-      if (idx >= 0) {
-        if (!words[idx].word) words[idx].word = wm2[2];
-      } else {
-        words.push({ zi: wm2[1], pinyin: '', stroke: '', count: 0, word: wm2[2] });
-      }
-      continue;
-    }
-
-    // Pattern: 汉字 pinyin 词语 【笔顺】笔画数
-    // 味 wèi 口味
-    let m = line.match(/^([一-鿿])\s+([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)\s*(.+)?$/);
-    if (!m) {
-      // Pattern: 用 | yòng | 用心 | 笔顺：...
-      m = line.match(/^([一-鿿])\s*[|｜]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
-    }
-    if (!m) {
-      // Pattern: 味：wèi，组词：口味
-      m = line.match(/^([一-鿿])\s*[：:]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
-    }
-
-    if (m) {
-      const zi = m[1];
-      let pinyin = m[2].replace(/[1-4]$/, '');
-      const rest = m[3] || '';
-
-      // 提取词语
-      let word = '';
-      const wm = rest.match(/([一-鿿]{2,})/);
-      if (wm) word = wm[1];
-
-      // 提取笔顺
-      let stroke = '';
-      const sm = (rest + line).match(/笔顺[：:]\s*([一-鿿、，,]+)/);
-      if (sm) stroke = sm[1];
-
-      // 提取笔画数
-      let count = 0;
-      const cm = (rest + line).match(/(\d+)画/);
-      if (cm) count = parseInt(cm[1]);
-
-      words.push({ zi, pinyin, stroke, count, word });
     }
   }
 
-  // 如果ziPairLines没有解析出字但有关键词行，尝试从逗号分隔的列表中提取
+  // ===== Phase 4: 尝试旧格式解析（兼容原有格式） =====
+  if (words.length === 0) {
+    for (const line of ziPairLines) {
+      // "词语（拼音）" 格式: 贝壳（bèi ké）
+      let wpMatch = line.match(/^([一-鿿]+)[（(]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\s*[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]*)\s*[)）]/);
+      if (wpMatch) {
+        const chars = wpMatch[1].split('');
+        const pinyins = wpMatch[2].trim().split(/\s+/);
+        for (let i = 0; i < chars.length && i < pinyins.length; i++) {
+          const idx = words.findIndex(w => w.zi === chars[i]);
+          if (idx >= 0) {
+            if (!words[idx].pinyin) words[idx].pinyin = pinyins[i].replace(/[1-4]$/, '');
+          } else {
+            words.push({ zi: chars[i], pinyin: pinyins[i].replace(/[1-4]$/, ''), stroke: '', count: 0, word: '' });
+          }
+        }
+        continue;
+      }
+
+      // "序号. 字（N画）：笔顺" 格式: 1. 贝（4画）：竖 → 横折
+      let sMatch = line.match(/^\d+[.、]\s*([一-鿿])\s*（(\d+)画）[：:]\s*(.+)/);
+      if (sMatch) {
+        const zi = sMatch[1];
+        const count = parseInt(sMatch[2]);
+        const strokes = sMatch[3].split(/[→➡️]/).map(s => s.trim().replace(/[\/、]+$/, '')).filter(Boolean).join('、');
+        const idx = words.findIndex(w => w.zi === zi);
+        if (idx >= 0) {
+          words[idx].count = count;
+          if (!words[idx].stroke) words[idx].stroke = strokes;
+        } else {
+          words.push({ zi, pinyin: '', stroke: strokes, count, word: '' });
+        }
+        continue;
+      }
+
+      // "字（词语）" 格式: 大（大小）
+      let wm2 = line.match(/^([一-鿿])\s*[（(]\s*([一-鿿]{2,})\s*[）)]/);
+      if (wm2) {
+        const idx = words.findIndex(w => w.zi === wm2[1]);
+        if (idx >= 0) {
+          if (!words[idx].word) words[idx].word = wm2[2];
+        } else {
+          words.push({ zi: wm2[1], pinyin: '', stroke: '', count: 0, word: wm2[2] });
+        }
+        continue;
+      }
+
+      // Pattern: 汉字 pinyin 词语
+      let m = line.match(/^([一-鿿])\s+([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)\s*(.+)?$/);
+      if (!m) m = line.match(/^([一-鿿])\s*[|｜]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
+      if (!m) m = line.match(/^([一-鿿])\s*[：:]\s*([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\d?)/);
+
+      if (m) {
+        const zi = m[1];
+        let pinyin = m[2].replace(/[1-4]$/, '');
+        const rest = m[3] || '';
+        let word = '';
+        const wm = rest.match(/([一-鿿]{2,})/);
+        if (wm) word = wm[1];
+        let stroke = '';
+        const sm = (rest + line).match(/笔顺[：:]\s*([一-鿿、，,]+)/);
+        if (sm) stroke = sm[1];
+        let count = 0;
+        const cm = (rest + line).match(/(\d+)画/);
+        if (cm) count = parseInt(cm[1]);
+        words.push({ zi, pinyin, stroke, count, word });
+      }
+    }
+  }
+
+  // ===== Phase 5: 如果还没提取到字，从关键词行中提取 =====
   if (words.length === 0 && ziKwLines.length > 0) {
-    const skipChars = new Set('识字生字汉字认字字词词语笔顺组词读写序号');
+    const skipChars = new Set('识字生字汉字认字字词词语笔顺组词读写序号偏旁部首新授');
     for (const kl of ziKwLines) {
-      // 提取所有汉字字符，过滤掉常见标签字
       const allChars = (kl.match(/[一-鿿]/g) || []).filter(c => !skipChars.has(c));
       if (allChars.length >= 2) {
         for (const ch of allChars) {
@@ -2139,99 +2246,161 @@ function smartParseZi(ziPairLines, allLines, ziKwLines) {
     }
   }
 
-  // 生成题目
-  const questions = [];
-
+  // ===== Phase 6: 为每个字标注偏旁部首 =====
   for (const w of words) {
-    if (!w.pinyin) continue; // 跳过没有拼音的字
-    // 字→拼音
-    if (words.length >= 3) {
-      const options = shuffleArr([w.pinyin, ...words.filter(o => o.zi !== w.zi && o.pinyin).map(o => o.pinyin).slice(0, 3)]);
-      while (options.length < 4) options.push(w.pinyin + 'g');
-      const ansIdx = options.indexOf(w.pinyin);
-      if (ansIdx >= 0) {
-        questions.push({ type: 'zi2pinyin', zi: w.zi, options: options.slice(0, 4), answer: ansIdx });
+    for (const r of radicals) {
+      if (r.chars.includes(w.zi)) {
+        w.radical = r.name;
+        break;
+      }
+    }
+  }
+
+  // ===== Phase 7: 生成丰富题型 =====
+  const questions = [];
+  const wordsWithPinyin = words.filter(w => w.pinyin);
+  const wordsWithStroke = words.filter(w => w.stroke);
+
+  // 字→拼音
+  for (const w of wordsWithPinyin) {
+    if (wordsWithPinyin.length >= 3 && questions.length < 18) {
+      const options = shuffleArr([w.pinyin, ...wordsWithPinyin.filter(o => o.zi !== w.zi).map(o => o.pinyin).slice(0, 3)]);
+      if (options.length >= 2) {
+        questions.push({ type: 'zi2pinyin', zi: w.zi, options: options.slice(0, 4), answer: options.indexOf(w.pinyin) });
       }
 
       // 拼音→字
       const ziOptions = shuffleArr([w.zi, ...words.filter(o => o.zi !== w.zi).map(o => o.zi).slice(0, 3)]);
-      while (ziOptions.length < 4) ziOptions.push('字');
-      const ziAnsIdx = ziOptions.indexOf(w.zi);
-      if (ziAnsIdx >= 0) {
-        questions.push({ type: 'pinyin2zi', pinyin: w.pinyin, options: ziOptions.slice(0, 4), answer: ziAnsIdx });
+      if (ziOptions.length >= 2) {
+        questions.push({ type: 'pinyin2zi', pinyin: w.pinyin, options: ziOptions.slice(0, 4), answer: ziOptions.indexOf(w.zi) });
       }
+    }
+  }
+
+  // 快速找字游戏
+  if (wordsWithPinyin.length >= 3) {
+    for (const w of wordsWithPinyin) {
+      if (questions.length >= 20) break;
+      const others = wordsWithPinyin.filter(x => x.zi !== w.zi).map(x => x.zi);
+      const opts = shuffleArr([w.zi, ...others.slice(0, Math.min(3, others.length))]);
+      if (opts.length < 2) continue;
+      questions.push({ type: 'quicktap', target: w.zi, options: opts, answer: opts.indexOf(w.zi) });
+    }
+  }
+
+  // 笔顺题：第N笔是什么？
+  if (wordsWithStroke.length >= 2) {
+    for (const w of wordsWithStroke) {
+      if (questions.length >= 20) break;
+      const strokes = w.stroke.split('、');
+      if (strokes.length < 3) continue;
+      // 随机挑 1-2 个笔画位置问
+      const positions = shuffleArr(strokes.map((_, i) => i)).slice(0, Math.min(2, strokes.length));
+      for (const pos of positions) {
+        const correct = strokes[pos];
+        // 从其他笔画中选干扰项
+        const distractorPool = wordsWithStroke.flatMap(ow => ow.stroke.split('、')).filter(s => s !== correct);
+        const uniqueDistractors = [...new Set(distractorPool)];
+        const opts = shuffleArr([correct, ...uniqueDistractors.slice(0, 3)]);
+        if (opts.length < 2) continue;
+        questions.push({
+          type: 'stroke',
+          zi: w.zi,
+          question: `"${w.zi}"字第${pos + 1}笔是什么？`,
+          options: opts.slice(0, 4),
+          answer: opts.indexOf(correct)
+        });
+      }
+    }
+  }
+
+  // 笔顺题：总共有几画？
+  if (wordsWithStroke.length >= 3) {
+    for (const w of wordsWithStroke) {
+      if (questions.length >= 22) break;
+      if (!w.count || w.count < 2) continue;
+      const wrongCounts = wordsWithStroke.filter(x => x.zi !== w.zi && x.count).map(x => x.count);
+      const uniqueWrong = [...new Set(wrongCounts)].filter(c => c !== w.count);
+      const opts = shuffleArr([w.count, ...uniqueWrong.slice(0, 3)]);
+      if (opts.length < 2) continue;
+      questions.push({
+        type: 'choice',
+        question: `"${w.zi}"字共有几画？`,
+        options: opts.map(String),
+        answer: opts.indexOf(w.count)
+      });
     }
   }
 
   // 连线题（字→词）
   const matchable = words.filter(w => w.word);
-  if (matchable.length >= 2) {
+  if (matchable.length >= 2 && questions.length < 22) {
     const left = matchable.map(w => w.zi);
     const right = matchable.map(w => w.word);
-    const answer = left.map((_, i) => [i, i]);
-    questions.push({ type: 'match', left, right, answer });
+    questions.push({ type: 'match', left, right, answer: left.map((_, i) => [i, i]) });
   }
 
-  // 快速找字游戏 (quicktap) — 从有拼音的字中生成
-  const wordsWithPinyin = words.filter(w => w.pinyin);
-  if (wordsWithPinyin.length >= 3 && questions.length < 15) {
-    const usedQt = new Set();
-    for (const w of wordsWithPinyin) {
-      if (usedQt.has(w.zi) || questions.length >= 15) continue;
-      usedQt.add(w.zi);
-      const others = wordsWithPinyin.filter(x => x.zi !== w.zi).map(x => x.zi);
-      const opts = shuffleArr([w.zi, ...others.slice(0, Math.min(3, others.length))]);
-      if (opts.length < 2) continue;
-      questions.push({
-        type: 'quicktap',
-        target: w.zi,
-        options: opts,
-        answer: opts.indexOf(w.zi)
-      });
-    }
-  }
-
-  // 组词游戏 (compose) — 从有word配对的数据中生成
+  // 组词游戏
   const hasWord = words.filter(w => w.word);
-  if (hasWord.length >= 2 && questions.length < 15) {
+  if (hasWord.length >= 2 && questions.length < 22) {
     const usedCp = new Set();
     for (const w of hasWord) {
+      if (questions.length >= 22) break;
       const wordChars = w.word.split('');
       if (wordChars.length < 2 || usedCp.has(w.word)) continue;
       usedCp.add(w.word);
-      // 收集干扰字
       const distractorChars = words.filter(x => !wordChars.includes(x.zi)).map(x => x.zi);
       if (distractorChars.length < 1) continue;
       const allOpts = shuffleArr([...wordChars, ...distractorChars.slice(0, 4 - wordChars.length)]);
       if (allOpts.length < 2) continue;
-      questions.push({
-        type: 'compose',
-        word: w.word,
-        chars: allOpts,
-        answer: wordChars
-      });
-      if (questions.length >= 15) break;
+      questions.push({ type: 'compose', word: w.word, chars: allOpts, answer: wordChars });
     }
   }
 
-  // 如果没有任何题目但有字（没有拼音的情况），生成互动找字游戏
-  if (questions.length === 0 && words.length >= 3) {
-    const charList = words.map(w => w.zi);
-    for (let i = 0; i < Math.min(charList.length, 6); i++) {
-      const target = charList[i];
-      const others = charList.filter(c => c !== target);
-      const opts = shuffleArr([target, ...others.slice(0, Math.min(3, others.length))]);
+  // 偏旁部首识别题（新！）
+  if (radicals.length >= 2 && charOrder.length >= 4) {
+    for (const r of radicals) {
+      if (questions.length >= 24) break;
+      if (r.chars.length < 1) continue;
+      const targetChar = r.chars[0];
+      // "下面哪个字的偏旁部首是「大字头」？"
+      const allChars = words.filter(w => w.zi).map(w => w.zi);
+      const opts = shuffleArr([targetChar, ...allChars.filter(c => c !== targetChar).slice(0, 3)]);
       if (opts.length < 2) continue;
       questions.push({
-        type: 'quicktap',
-        target,
-        options: opts,
-        answer: opts.indexOf(target)
+        type: 'choice',
+        question: `下面哪个字的偏旁是「${r.name}」？`,
+        options: opts.slice(0, 4),
+        answer: opts.indexOf(targetChar)
       });
+      // 反过来：「张」字的偏旁是什么？
+      if (r.chars.length >= 2 && questions.length < 24) {
+        const qChar = r.chars[1];
+        const radicalOpts = shuffleArr([r.name, ...radicals.filter(rr => rr.name !== r.name).map(rr => rr.name)]);
+        if (radicalOpts.length >= 2) {
+          questions.push({
+            type: 'choice',
+            question: `「${qChar}」字的偏旁是什么？`,
+            options: radicalOpts.slice(0, 4),
+            answer: radicalOpts.indexOf(r.name)
+          });
+        }
+      }
     }
   }
 
-  return { title, words, questions, homework };
+  // 如果题目还是不够，补充基本的快速找字
+  if (questions.length < 6 && words.length >= 3) {
+    for (let i = 0; i < Math.min(words.length, 8); i++) {
+      const target = words[i].zi;
+      const others = words.filter(w => w.zi !== target).map(w => w.zi);
+      const opts = shuffleArr([target, ...others.slice(0, Math.min(3, others.length))]);
+      if (opts.length < 2) continue;
+      questions.push({ type: 'quicktap', target, options: opts, answer: opts.indexOf(target) });
+    }
+  }
+
+  return { title, words, questions, homework, radicals };
 }
 
 // 根据输入生成游戏
@@ -2319,13 +2488,39 @@ p-eng→peng
 作业：完成拼音描红本"eng"的内容
 作业：复习后鼻韵母ang、eng朗读卷一次
 
-阶梯识字《竹子》
-味 wèi 口味 笔顺：竖、横折、横、横、横、竖、撇、捺 8画
-用 yòng 用心 笔顺：撇、横折钩、横、横、竖 5画
-砍 kǎn 砍伐 笔顺：横、撇、竖、横折、横、撇、横钩、撇、捺 9画
-虽 suī 虽然 笔顺：竖、横折、横、竖、横折、横、竖、横、点 9画
-作业：完成第26页书写作业（注意书写笔顺）
-作业：指读书本第25页内容：识字、词语各3次`;
+偏旁部首新授：大字头、广字头、弓字旁
+识字：奇，牵，奔，席，店，庄，张，弯，强
+笔顺：
+🌟奇
+• 拼音：qí（常用）、jī
+• 笔顺（8画）：横、撇、点、横、竖、横折、横、竖
+🌟牵
+• 拼音：qiān
+• 笔顺（9画）：横、撇、点、点、横钩、撇、横、横、竖
+🌟奔
+• 拼音：bēn（常用）、bèn
+• 笔顺（8画）：横、撇、捺、横、竖、横、撇、竖
+🌟席
+• 拼音：xí
+• 笔顺（10画）：点、横、撇、横、竖、竖、横、竖、横折钩、竖
+🌟店
+• 拼音：diàn
+• 笔顺（8画）：点、横、撇、竖、横、竖、横折、横
+🌟庄
+• 拼音：zhuāng
+• 笔顺（6画）：点、横、撇、横、竖、横
+🌟张
+• 拼音：zhāng
+• 笔顺（7画）：横折、横、竖折折钩、撇、横、竖提、捺
+🌟弯
+• 拼音：wān
+• 笔顺（9画）：点、横、竖、竖、撇、点、横折、横、竖折折钩
+🌟强
+• 拼音：qiáng（常用）、qiǎng、jiàng
+• 笔顺（12画）：横折、横、竖折折钩、竖、横折、横、竖、横折、横、竖、横、点
+⚠️回家作业：
+1️⃣完成44-46页内容（⚠️注意书写生字的书写笔顺）
+2⃣️今日作业分2次完成，先写每个汉字的前五个，周末完成后面6个。本次作业下周一交`;
   generateFromInput();
 }
 
@@ -2653,6 +2848,7 @@ function renderKnowledgePage(subject) {
             ${w.pinyin}
             <button class="play-sound-btn" onclick="speakText('${w.zi}')" style="margin-left:8px;">🔊</button>
           </div>
+          ${w.radical ? `<div class="zi-detail" style="color:#E65100;">🔤 偏旁部首：${w.radical}</div>` : ''}
           <div class="zi-detail">笔画数：${w.count}画</div>
           <div class="zi-detail" style="margin-top:8px;font-weight:bold;">笔顺：</div>
           <div class="stroke-animation" id="stroke-animation">
